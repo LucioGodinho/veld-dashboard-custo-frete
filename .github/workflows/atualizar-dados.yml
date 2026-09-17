@@ -1,49 +1,7 @@
-name: Atualizar dados da planilha
-
-on:
-  workflow_dispatch:
-  schedule:
-    - cron: "*/15 * * * *"
-
-permissions:
-  contents: write
-
-jobs:
-  update-data:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Baixar repositorio
-        uses: actions/checkout@v4
-
-      - name: Baixar dados da planilha
+      - name: Testar acesso ao Google
         run: |
-          curl -L --retry 3 --retry-delay 2 --fail --silent --show-error "https://docs.google.com/spreadsheets/d/e/2PACX-1vSGrC_jfP5MMcrbIDMmvZLqDxeP2n0_uZI5HdRiBO62I-BwJHdRRQQKKD-UBeyndA/pub?gid=2024015133&single=true&output=csv" -o data.csv
-
-          echo "Arquivo baixado:"
-          ls -lh data.csv
-
-          echo "Primeira linha:"
-          head -n 1 data.csv
-
-          test -s data.csv
-
-      - name: Verificar dados
-        run: |
-          echo "Verificando arquivo CSV..."
-          wc -l data.csv
-          head -n 2 data.csv
-
-      - name: Publicar alteracao
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git add data.csv
-
-          if git diff --cached --quiet; then
-            echo "Nenhuma alteracao nos dados."
-          else
-            git commit -m "Atualiza dados da planilha"
-            git push
-          fi
+          echo "Testando acesso..."
+          curl -L -I \
+            --retry 3 \
+            --retry-delay 2 \
+            "https://docs.google.com/spreadsheets/d/e/2PACX-1vSGrC_jfP5MMcrbIDMmvZLqDxeP2n0_uZI5HdRiBO62I-BwJHdRRQQKKD-UBeyndA/pub?gid=2024015133&single=true&output=csv"
