@@ -1,0 +1,40 @@
+name: Atualizar dados da planilha
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/15 * * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+
+      - name: Baixar CSV da planilha
+        run: |
+          curl -L --fail --silent --show-error \
+            "https://docs.google.com/spreadsheets/d/e/2PACX-1vSGrC_jfP5MMcrbIDMmvZLqDxeP2n0_uZI5HdRiBO62I-BwJHdRRQQKKD-UBeyndA/pub?gid=1475672213&single=true&output=csv" \
+            -o data.csv
+
+          test -s data.csv
+          grep -qi "VALOR NF" data.csv
+
+      - name: Publicar alteração
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add data.csv
+
+          if git diff --cached --quiet; then
+            echo "Nenhuma alteração nos dados."
+          else
+            git commit -m "Atualiza dados da planilha"
+            git push
+          fi
