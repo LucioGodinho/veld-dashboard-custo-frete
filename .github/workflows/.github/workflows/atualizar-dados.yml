@@ -1,1 +1,18 @@
+      - name: Baixar dados da planilha
+        run: |
+          curl -L \
+            --retry 3 \
+            --retry-delay 2 \
+            --fail \
+            --silent \
+            --show-error \
+            "https://docs.google.com/spreadsheets/d/e/2PACX-1vSGrC_jfP5MMcrbIDMmvZLqDxeP2n0_uZI5HdRiBO62I-BwJHdRRQQKKD-UBeyndA/pub?gid=2024015133&single=true&output=csv" \
+            -o data.csv
 
+          echo "Arquivo baixado:"
+          ls -lh data.csv
+
+          echo "Primeira linha:"
+          head -n 1 data.csv
+
+          test -s data.csv
