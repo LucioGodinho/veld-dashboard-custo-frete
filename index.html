@@ -55,7 +55,7 @@ footer{padding:15px 24px;text-align:center;color:var(--muted);font-size:11px}
 #onlineDiagnostics{max-width:1500px;margin-left:auto!important;margin-right:auto!important}
 @media(max-width:700px){#onlineDiagnostics{margin-left:12px!important;margin-right:12px!important}}
 </style>
-<meta name="dashboard-version" content="V49"><meta name="aggregation-rule" content="financeiro-soma; carregamentos-distintos"><meta name="description" content="Custo frete | Logística Transportes"><!-- V49: data.csv local + atualização por importação protegida; contador de visitantes; valores financeiros por SOMA; carregamentos por CONTAGEM DISTINTA de CONTÊINER --><script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<meta name="dashboard-version" content="V50"><meta name="aggregation-rule" content="financeiro-soma; carregamentos-distintos"><meta name="description" content="Custo frete | Logística Transportes"><!-- V50: data.csv local + atualização por importação protegida; contador de visitantes; valores financeiros por SOMA; carregamentos por CONTAGEM DISTINTA de CONTÊINER --><script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body>
 <header>
@@ -559,7 +559,7 @@ async function importFile(e){
    else throw new Error('Formato não suportado. Use XLSX, XLS ou CSV.');
    if(!validOnlineRows(imported)) throw new Error('Não encontrei registros compatíveis na aba ExpediçãoVeld.');
    rows=imported;
-   try{localStorage.setItem('veldImportedRowsV49',JSON.stringify(rows));}catch(_){}
+   try{localStorage.setItem('veldImportedRowsV50',JSON.stringify(rows));}catch(_){}
    setupFilters(false); render();
    const ss=document.getElementById('searchStatus'); if(ss) ss.textContent=rows.length.toLocaleString('pt-BR')+' registros importados';
    if(status) status.innerHTML='Base: <strong>'+file.name+'</strong> · '+rows.length.toLocaleString('pt-BR')+' registros';
@@ -600,7 +600,7 @@ function parseXLSX(buffer){
    volume:val(get(row,'QTD. BOBINAS','QTD BOBINAS')),transportador:get(row,'TRANSPORTADOR','TRANSPORTADORA'),modal:get(row,'MODAL'),
    origem:get(row,'ORIGEM'),destino:get(row,'DESTINO'),uf_dest:get(row,'UF DEST','UF DESTINO'),container:get(row,'CONTÊINER','CONTAINER'),
    custo:valCost(get(row,'CUSTO TRANSP.','CUSTO TRANSP','CUSTO TRANSPORTE')),
-   extra:valCost(getFlexible(row,'VLR ADICIONAL','VLR. ADICIONAL','VALOR ADICIONAL','VALOR ADICIONAL R,'VALOR DO FRETE LIQUIDO','VALOR DO FRETE LÍQUIDO','VALOR FRETE','VALOR FRETE LIQUIDO','VALOR FRETE LÍQUIDO','VLR DO FRETE','VLR FRETE','VLR FRETE LIQUIDO','VLR FRETE LÍQUIDO','FRETE LIQUIDO','FRETE LÍQUIDO')),
+   extra:valCost(getFlexible(row,'VLR ADICIONAL','VLR. ADICIONAL','VALOR ADICIONAL','VALOR ADICIONAL R,
    adv:val(getFlexible(row,'ADV','VLR ADV','VALOR ADV','ADV R$','ADV R')),baf:val(getFlexible(row,'BAF','VLR BAF','VALOR BAF','BAF R$','BAF R')),
    infraest_pedag:val(getFlexible(row,'INFRAEST. PEDAGIO','INFRAEST PEDAGIO','INFRAEST. PEDÁGIO','INFRAEST PEDÁGIO','VLR INFRAEST. PEDAGIO','VALOR INFRAEST. PEDAGIO')),
    impostos:val(getFlexible(row,'IMPOSTOS','IMPOSTO','VLR IMPOSTOS','VALOR IMPOSTOS','IMPOSTOS R$')),
@@ -609,7 +609,7 @@ function parseXLSX(buffer){
  })).filter(r=>r.nf!==''||r.valor_nf!==0||r.peso!==0||r.transportador!==''||r.destino!==''||r.custo!==0||r.extra!==0);
 }
 function loadImportedCache(){
- try{const x=JSON.parse(localStorage.getItem('veldImportedRowsV49')||'null');if(Array.isArray(x)&&validOnlineRows(x)){rows=x;return true;}}catch(e){}
+ try{const x=JSON.parse(localStorage.getItem('veldImportedRowsV50')||'null');if(Array.isArray(x)&&validOnlineRows(x)){rows=x;return true;}}catch(e){}
  return false;
 }
 
@@ -782,7 +782,7 @@ adminUI();
 countVisitor();
 if(!loadImportedCache()) loadLocalCSV();
 </script>
-<div style="position:fixed;right:10px;bottom:8px;font:11px Arial;color:#7a8797;opacity:.8">V49 · Importação direta do Excel · contador de visitantes · SOMA financeira + CONTAGEM DISTINTA de carregamentos</div></body>
+<div style="position:fixed;right:10px;bottom:8px;font:11px Arial;color:#7a8797;opacity:.8">V50 · Importação direta do Excel · contador de visitantes · SOMA financeira + CONTAGEM DISTINTA de carregamentos</div></body>
 </html>,'VLR ADICIONAL R,'VALOR DO FRETE LIQUIDO','VALOR DO FRETE LÍQUIDO','VALOR FRETE','VALOR FRETE LIQUIDO','VALOR FRETE LÍQUIDO','VLR DO FRETE','VLR FRETE','VLR FRETE LIQUIDO','VLR FRETE LÍQUIDO','FRETE LIQUIDO','FRETE LÍQUIDO')),
    adv:val(getFlexible(row,'ADV','VLR ADV','VALOR ADV','ADV R$','ADV R')),baf:val(getFlexible(row,'BAF','VLR BAF','VALOR BAF','BAF R$','BAF R')),
    infraest_pedag:val(getFlexible(row,'INFRAEST. PEDAGIO','INFRAEST PEDAGIO','INFRAEST. PEDÁGIO','INFRAEST PEDÁGIO','VLR INFRAEST. PEDAGIO','VALOR INFRAEST. PEDAGIO')),
@@ -792,7 +792,7 @@ if(!loadImportedCache()) loadLocalCSV();
  })).filter(r=>r.nf!==''||r.valor_nf!==0||r.peso!==0||r.transportador!==''||r.destino!==''||r.custo!==0||r.extra!==0);
 }
 function loadImportedCache(){
- try{const x=JSON.parse(localStorage.getItem('veldImportedRowsV49')||'null');if(Array.isArray(x)&&validOnlineRows(x)){rows=x;return true;}}catch(e){}
+ try{const x=JSON.parse(localStorage.getItem('veldImportedRowsV50')||'null');if(Array.isArray(x)&&validOnlineRows(x)){rows=x;return true;}}catch(e){}
  return false;
 }
 
@@ -965,7 +965,7 @@ adminUI();
 countVisitor();
 if(!loadImportedCache()) loadLocalCSV();
 </script>
-<div style="position:fixed;right:10px;bottom:8px;font:11px Arial;color:#7a8797;opacity:.8">V49 · Importação direta do Excel · contador de visitantes · SOMA financeira + CONTAGEM DISTINTA de carregamentos</div></body>
+<div style="position:fixed;right:10px;bottom:8px;font:11px Arial;color:#7a8797;opacity:.8">V50 · Importação direta do Excel · contador de visitantes · SOMA financeira + CONTAGEM DISTINTA de carregamentos</div></body>
 </html>,'ADICIONAL')),
    frete_liquido:val(getFlexible(row,'VALOR DO FRETE','VALOR DO FRETE LIQUIDO','VALOR DO FRETE LÍQUIDO','VALOR FRETE','VALOR FRETE LIQUIDO','VALOR FRETE LÍQUIDO','VLR DO FRETE','VLR FRETE','VLR FRETE LIQUIDO','VLR FRETE LÍQUIDO','FRETE LIQUIDO','FRETE LÍQUIDO')),
    adv:val(getFlexible(row,'ADV','VLR ADV','VALOR ADV','ADV R$','ADV R')),baf:val(getFlexible(row,'BAF','VLR BAF','VALOR BAF','BAF R$','BAF R')),
@@ -976,7 +976,7 @@ if(!loadImportedCache()) loadLocalCSV();
  })).filter(r=>r.nf!==''||r.valor_nf!==0||r.peso!==0||r.transportador!==''||r.destino!==''||r.custo!==0||r.extra!==0);
 }
 function loadImportedCache(){
- try{const x=JSON.parse(localStorage.getItem('veldImportedRowsV49')||'null');if(Array.isArray(x)&&validOnlineRows(x)){rows=x;return true;}}catch(e){}
+ try{const x=JSON.parse(localStorage.getItem('veldImportedRowsV50')||'null');if(Array.isArray(x)&&validOnlineRows(x)){rows=x;return true;}}catch(e){}
  return false;
 }
 
@@ -1149,5 +1149,1105 @@ adminUI();
 countVisitor();
 if(!loadImportedCache()) loadLocalCSV();
 </script>
-<div style="position:fixed;right:10px;bottom:8px;font:11px Arial;color:#7a8797;opacity:.8">V49 · Importação direta do Excel · contador de visitantes · SOMA financeira + CONTAGEM DISTINTA de carregamentos</div></body>
+<div style="position:fixed;right:10px;bottom:8px;font:11px Arial;color:#7a8797;opacity:.8">V50 · Importação direta do Excel · contador de visitantes · SOMA financeira + CONTAGEM DISTINTA de carregamentos</div></body>
+</html>,'VLR ADICIONAL R,
+   adv:val(getFlexible(row,'ADV','VLR ADV','VALOR ADV','ADV R$','ADV R')),baf:val(getFlexible(row,'BAF','VLR BAF','VALOR BAF','BAF R$','BAF R')),
+   infraest_pedag:val(getFlexible(row,'INFRAEST. PEDAGIO','INFRAEST PEDAGIO','INFRAEST. PEDÁGIO','INFRAEST PEDÁGIO','VLR INFRAEST. PEDAGIO','VALOR INFRAEST. PEDAGIO')),
+   impostos:val(getFlexible(row,'IMPOSTOS','IMPOSTO','VLR IMPOSTOS','VALOR IMPOSTOS','IMPOSTOS R$')),
+   frete_kg:val(get(row,'FRETE/ KG','FRETE / KG')),pct_fatur:val(get(row,'% TRANSP / FATUR','% TRANSP/FATUR')),
+   data:excelDate(get(row,'DATA CARREG','DATA CARREGAMENTO'))
+ })).filter(r=>r.nf!==''||r.valor_nf!==0||r.peso!==0||r.transportador!==''||r.destino!==''||r.custo!==0||r.extra!==0);
+}
+function loadImportedCache(){
+ try{const x=JSON.parse(localStorage.getItem('veldImportedRowsV50')||'null');if(Array.isArray(x)&&validOnlineRows(x)){rows=x;return true;}}catch(e){}
+ return false;
+}
+
+function normalizeHeader(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-z0-9%]+/g,' ').trim().toUpperCase()}
+function splitCSVLine(line,delimiter){
+ const out=[];let cur='',quoted=false;
+ for(let i=0;i<line.length;i++){
+   const ch=line[i];
+   if(ch==='"'){
+     if(quoted && line[i+1]==='"'){cur+='"';i++;}
+     else quoted=!quoted;
+   } else if(ch===delimiter && !quoted){out.push(cur);cur='';}
+   else cur+=ch;
+ }
+ out.push(cur); return out;
+}
+function parseCSV(t){
+ const lines=String(t||'').replace(/^\uFEFF/,'').split(/\r?\n/).filter(line=>line.trim()!=='');
+ if(!lines.length)return [];
+ const delimiter=(splitCSVLine(lines[0],',').length>=splitCSVLine(lines[0],';').length)?',':';';
+ let headerIndex=-1;
+ for(let i=0;i<Math.min(lines.length,40);i++){ const h=normalizeHeader(lines[i]); if(h.includes('VALOR NF')||h.includes('VALOR DO FRETE')||h.includes('CUSTO TRANSP')||h.includes('TRANSPORTADOR')){headerIndex=i;break;} }
+ if(headerIndex<0) return [];
+ const headers=splitCSVLine(lines[headerIndex],delimiter).map(x=>x.trim());
+ const idx={};headers.forEach((h,i)=>{const k=normalizeHeader(h);if(k)idx[k]=i});
+ const normalizedHeaders=headers.map(normalizeHeader);
+ const get=(arr,...names)=>{for(const n of names){const i=idx[normalizeHeader(n)];if(i!==undefined)return arr[i]??''}return ''};
+ const getFlexible=(arr,...names)=>{const direct=get(arr,...names);if(direct!=='')return direct;const targets=names.map(normalizeHeader).filter(Boolean);const i=normalizedHeaders.findIndex(h=>targets.some(t=>h===t||h.includes(t)||t.includes(h)));return i>=0?(arr[i]??''):''};
+ return lines.slice(headerIndex+1).map(line=>{const c=splitCSVLine(line,delimiter).map(x=>x.trim());return {
+  nf:get(c,'NF','CARREGAMENTO'),valor_nf:val(get(c,'VALOR NF','VALOR DA NF')),peso:val(get(c,'PESO')),volume:val(get(c,'QTD. BOBINAS','QTD BOBINAS')),
+  transportador:get(c,'TRANSPORTADOR','TRANSPORTADORA'),modal:get(c,'MODAL'),origem:get(c,'ORIGEM'),destino:get(c,'DESTINO'),uf_dest:get(c,'UF DEST','UF DESTINO'),container:get(c,'CONTÊINER','CONTAINER'),
+  custo:valCost(get(c,'CUSTO TRANSP.','CUSTO TRANSP','CUSTO TRANSPORTE')),extra:valCost(getFlexible(c,'VLR ADICIONAL','VLR. ADICIONAL','VALOR ADICIONAL','VALOR ADICIONAL R$','VLR ADICIONAL R$','ADICIONAL')),
+  frete_liquido:val(getFlexible(c,'VALOR DO FRETE','VALOR DO FRETE LIQUIDO','VALOR DO FRETE LÍQUIDO','VALOR FRETE','VALOR FRETE LIQUIDO','VALOR FRETE LÍQUIDO','VLR DO FRETE','VLR FRETE','VLR FRETE LIQUIDO','VLR FRETE LÍQUIDO','FRETE LIQUIDO','FRETE LÍQUIDO')),
+  adv:val(getFlexible(c,'ADV','VLR ADV','VALOR ADV','ADV R$','ADV R')),baf:val(getFlexible(c,'BAF','VLR BAF','VALOR BAF','BAF R$','BAF R')),
+  infraest_pedag:val(getFlexible(c,'INFRAEST. PEDAGIO','INFRAEST PEDAGIO','INFRAEST. PEDÁGIO','INFRAEST PEDÁGIO','VLR INFRAEST. PEDAGIO','VALOR INFRAEST. PEDAGIO')),
+  impostos:val(getFlexible(c,'IMPOSTOS','IMPOSTO','VLR IMPOSTOS','VALOR IMPOSTOS','IMPOSTOS R$')),frete_kg:val(get(c,'FRETE/ KG','FRETE / KG')),pct_fatur:val(get(c,'% TRANSP / FATUR','% TRANSP/FATUR')),data:get(c,'DATA CARREG','DATA CARREGAMENTO')
+ };}).filter(r=>r.nf!==''||r.valor_nf!==0||r.peso!==0||r.transportador!==''||r.extra!==0);
+}
+function parseGvizResponse(text){
+ const clean=String(text||'').replace(/^\s*\/\*O_o\*\/\s*/, '');
+ const m=clean.match(/google\.visualization\.Query\.setResponse\((.*)\)\s*;?\s*$/s);
+ if(!m)return [];
+ const obj=JSON.parse(m[1]);
+ if(obj.status&&obj.status!=='ok')throw new Error('Resposta Google inválida');
+ const table=obj.table||{}, cols=table.cols||[], data=table.rows||[];
+ if(!data.length)return [];
+ const cell=(row,i)=>{const x=(row.c||[])[i];return x&&x.v!=null?x.v:''};
+ const rowText=(row,i)=>String(cell(row,i)||'').trim();
+ // A resposta que o GViz está entregando para a aba expediçãoveld é uma tabela dinâmica:
+ // A=carregamento, B=custo transporte, C=peso, D=valor NF, E=frete/kg,
+ // F=% transporte/faturamento, G=transportadora, H=modal, I=data, J=destino, K=UF, L=qtd.
+ // Detectamos explicitamente essa estrutura. Não usamos a ordem das 70+ colunas da base,
+ // pois ela não está presente nessa resposta do Google.
+ const sample = data.slice(0,30);
+ const pivot= cols.length>=10 && sample.some(r=>{
+   const a=rowText(r,0).toLowerCase(), g=rowText(r,6), h=rowText(r,7), j=rowText(r,9);
+   return /rótulos de linha|total custo frete|média/.test(a) ||
+          (!!g && !!h && !!j && (String(cell(r,1)).trim()!=='' || String(cell(r,3)).trim()!==''));
+ });
+ if(pivot){
+   const out=[];
+   for(const row of data){
+     const transportador=rowText(row,6);
+     const modal=rowText(row,7);
+     const destino=rowText(row,9);
+     const nfLabel=rowText(row,0);
+     if(!transportador || transportador==='#N/A' || !modal || modal==='#N/A' || !destino || destino==='#N/A') continue;
+     if(!nfLabel || /total custo frete|média|rótulos de linha/i.test(nfLabel)) continue;
+     let date=rowText(row,8);
+     const dm=date.match(/^Date\((\d{4}),(\d+),(\d+)\)$/);
+     if(dm) date=`${dm[1]}-${String(Number(dm[2])+1).padStart(2,'0')}-${String(dm[3]).padStart(2,'0')}`;
+     out.push({
+       nf:nfLabel.replace(/^\s+/,''),
+       valor_nf:val(cell(row,3)),
+       peso:val(cell(row,2)),
+       volume:val(cell(row,11)),
+       transportador,
+       modal,
+       origem:'Manaus AM',
+       destino,
+       uf_dest:rowText(row,10),
+       container:nfLabel,
+       custo:val(cell(row,1)),
+       extra:0,
+       frete_liquido:val(cell(row,1)),
+       adv:0,baf:0,infraest_pedag:0,impostos:0,
+       frete_kg:val(cell(row,4)),
+       pct_fatur:val(cell(row,5)),
+       data:date
+     });
+   }
+   return out;
+ }
+ // Resposta com cabeçalhos reais.
+ const labels=cols.map(c=>String(c.label||'').trim());
+ if(labels.some(x=>/VALOR|PESO|TRANSPORT|MODAL|DESTINO|FRETE|CUSTO/i.test(x))){
+   const csv=[labels.map((x,i)=>csvQuote(x||('COL_'+i))).join(',')];
+   for(const row of data){const cells=row.c||[];csv.push(cols.map((_,i)=>{const c=cells[i];return csvQuote(!c||c.v==null?'':(c.f!=null?c.f:c.v))}).join(','));}
+   return parseCSV(csv.join('\n'));
+ }
+ return [];
+}
+function csvQuote(v){return '"'+String(v??'').replace(/"/g,'""')+'"'}
+const ONLINE_CSV_URLS = [
+ 'https://docs.google.com/spreadsheets/d/15PWGEHMXr43WyKKuN7dTBcHAGSToK8Vl/export?format=csv&gid=1475672213',
+ 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSGrC_jfP5MMcrbIDMmvZLqDxeP2n0_uZI5HdRiBO62I-BwJHdRRQQKKD-UBeyndA/pub?gid=1475672213&single=true&output=csv'
+];
+const ONLINE_CACHE_KEY = 'veldOnlineRowsV475';
+function saveOnlineCache(data){try{localStorage.setItem(ONLINE_CACHE_KEY,JSON.stringify(data));}catch(e){}}
+function loadOnlineCache(){try{const x=JSON.parse(localStorage.getItem(ONLINE_CACHE_KEY)||'null');return Array.isArray(x)?x:null}catch(e){return null}}
+async function loadOnline(){
+ if(!adminUnlocked){alert('Acesso administrativo necessário para atualizar a base.');return false;}
+ const btn=document.getElementById('btnAtualizarOnline');
+ const st=document.getElementById('autoStatus');
+ if(btn){btn.disabled=true;btn.textContent='Atualizando...';}
+ if(st)st.innerHTML='Atualização: <strong>consultando a aba ExpediçãoVeld...</strong>';
+ let lastErr='';
+ try{
+   for(const baseUrl of ONLINE_CSV_URLS){
+     try{
+       const res=await fetch(baseUrl+'&ts='+Date.now(),{cache:'no-store'});
+       if(!res.ok)throw new Error('HTTP '+res.status);
+       const text=await res.text();
+       const freshRows=parseCSV(text);
+       if(!validOnlineRows(freshRows))throw new Error('CSV sem registros compatíveis');
+       rows=freshRows;
+       saveOnlineCache(freshRows);
+       setupFilters(false);render();
+       const ss=document.getElementById('searchStatus');if(ss)ss.textContent=`${rows.length.toLocaleString('pt-BR')} registros encontrados`;
+       if(st)st.innerHTML=`Atualização: <strong>Google Sheets OK</strong> · ${rows.length.toLocaleString('pt-BR')} registros · ExpediçãoVeld`;
+       return true;
+     }catch(err){ lastErr=err; console.warn('Fonte online falhou:',baseUrl,err); }
+   }
+   throw lastErr || new Error('Nenhuma fonte online respondeu');
+ }catch(err){
+   const cached=loadOnlineCache();
+   if(cached && validOnlineRows(cached)){
+     rows=cached;setupFilters(false);render();
+     if(st)st.innerHTML=`Atualização: <strong>falhou</strong> · mantendo última base online válida (${rows.length.toLocaleString('pt-BR')} registros)`;
+   }else if(st)st.innerHTML='Atualização: <strong>falhou</strong> · mantendo a base local';
+   console.warn('Atualização online:',err);
+   return false;
+ }finally{
+   if(btn){btn.disabled=false;btn.textContent='Atualizar online';}
+ }
+}
+
+async function loadLocalCSV(){
+ try{
+   const res=await fetch('./data.csv?ts='+Date.now(),{cache:'no-store'});
+   if(!res.ok) throw new Error('data.csv não encontrado');
+   const text=await res.text();
+   const freshRows=parseCSV(text);
+   if(!validOnlineRows(freshRows)) throw new Error('data.csv inválido ou sem registros compatíveis');
+   rows=freshRows;
+   setupFilters(false);render();
+   const ss=document.getElementById('searchStatus');if(ss)ss.textContent=`${rows.length.toLocaleString('pt-BR')} registros`;
+   const st=document.getElementById('autoStatus');if(st)st.innerHTML='Base: <strong>data.csv</strong>';
+   return true;
+ }catch(err){
+   const st=document.getElementById('autoStatus');if(st)st.innerHTML='Base local: <strong>fallback incorporado</strong>';
+   setupFilters(false);render();
+   return false;
+ }
+}
+setupFilters(false);
+render();
+const initialStatus=document.getElementById('searchStatus'); if(initialStatus)initialStatus.textContent=`${filtered().length.toLocaleString('pt-BR')} registros`;
+adminUI();
+countVisitor();
+if(!loadImportedCache()) loadLocalCSV();
+</script>
+<div style="position:fixed;right:10px;bottom:8px;font:11px Arial;color:#7a8797;opacity:.8">V50 · Importação direta do Excel · contador de visitantes · SOMA financeira + CONTAGEM DISTINTA de carregamentos</div></body>
+</html>,'VLR ADICIONAL R,'VALOR DO FRETE LIQUIDO','VALOR DO FRETE LÍQUIDO','VALOR FRETE','VALOR FRETE LIQUIDO','VALOR FRETE LÍQUIDO','VLR DO FRETE','VLR FRETE','VLR FRETE LIQUIDO','VLR FRETE LÍQUIDO','FRETE LIQUIDO','FRETE LÍQUIDO')),
+   adv:val(getFlexible(row,'ADV','VLR ADV','VALOR ADV','ADV R$','ADV R')),baf:val(getFlexible(row,'BAF','VLR BAF','VALOR BAF','BAF R$','BAF R')),
+   infraest_pedag:val(getFlexible(row,'INFRAEST. PEDAGIO','INFRAEST PEDAGIO','INFRAEST. PEDÁGIO','INFRAEST PEDÁGIO','VLR INFRAEST. PEDAGIO','VALOR INFRAEST. PEDAGIO')),
+   impostos:val(getFlexible(row,'IMPOSTOS','IMPOSTO','VLR IMPOSTOS','VALOR IMPOSTOS','IMPOSTOS R$')),
+   frete_kg:val(get(row,'FRETE/ KG','FRETE / KG')),pct_fatur:val(get(row,'% TRANSP / FATUR','% TRANSP/FATUR')),
+   data:excelDate(get(row,'DATA CARREG','DATA CARREGAMENTO'))
+ })).filter(r=>r.nf!==''||r.valor_nf!==0||r.peso!==0||r.transportador!==''||r.destino!==''||r.custo!==0||r.extra!==0);
+}
+function loadImportedCache(){
+ try{const x=JSON.parse(localStorage.getItem('veldImportedRowsV50')||'null');if(Array.isArray(x)&&validOnlineRows(x)){rows=x;return true;}}catch(e){}
+ return false;
+}
+
+function normalizeHeader(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-z0-9%]+/g,' ').trim().toUpperCase()}
+function splitCSVLine(line,delimiter){
+ const out=[];let cur='',quoted=false;
+ for(let i=0;i<line.length;i++){
+   const ch=line[i];
+   if(ch==='"'){
+     if(quoted && line[i+1]==='"'){cur+='"';i++;}
+     else quoted=!quoted;
+   } else if(ch===delimiter && !quoted){out.push(cur);cur='';}
+   else cur+=ch;
+ }
+ out.push(cur); return out;
+}
+function parseCSV(t){
+ const lines=String(t||'').replace(/^\uFEFF/,'').split(/\r?\n/).filter(line=>line.trim()!=='');
+ if(!lines.length)return [];
+ const delimiter=(splitCSVLine(lines[0],',').length>=splitCSVLine(lines[0],';').length)?',':';';
+ let headerIndex=-1;
+ for(let i=0;i<Math.min(lines.length,40);i++){ const h=normalizeHeader(lines[i]); if(h.includes('VALOR NF')||h.includes('VALOR DO FRETE')||h.includes('CUSTO TRANSP')||h.includes('TRANSPORTADOR')){headerIndex=i;break;} }
+ if(headerIndex<0) return [];
+ const headers=splitCSVLine(lines[headerIndex],delimiter).map(x=>x.trim());
+ const idx={};headers.forEach((h,i)=>{const k=normalizeHeader(h);if(k)idx[k]=i});
+ const normalizedHeaders=headers.map(normalizeHeader);
+ const get=(arr,...names)=>{for(const n of names){const i=idx[normalizeHeader(n)];if(i!==undefined)return arr[i]??''}return ''};
+ const getFlexible=(arr,...names)=>{const direct=get(arr,...names);if(direct!=='')return direct;const targets=names.map(normalizeHeader).filter(Boolean);const i=normalizedHeaders.findIndex(h=>targets.some(t=>h===t||h.includes(t)||t.includes(h)));return i>=0?(arr[i]??''):''};
+ return lines.slice(headerIndex+1).map(line=>{const c=splitCSVLine(line,delimiter).map(x=>x.trim());return {
+  nf:get(c,'NF','CARREGAMENTO'),valor_nf:val(get(c,'VALOR NF','VALOR DA NF')),peso:val(get(c,'PESO')),volume:val(get(c,'QTD. BOBINAS','QTD BOBINAS')),
+  transportador:get(c,'TRANSPORTADOR','TRANSPORTADORA'),modal:get(c,'MODAL'),origem:get(c,'ORIGEM'),destino:get(c,'DESTINO'),uf_dest:get(c,'UF DEST','UF DESTINO'),container:get(c,'CONTÊINER','CONTAINER'),
+  custo:val(get(c,'CUSTO TRANSP.','CUSTO TRANSP','CUSTO TRANSPORTE')),extra:val(getFlexible(c,'VLR ADICIONAL','VLR. ADICIONAL','VALOR ADICIONAL','VALOR ADICIONAL R$','VLR ADICIONAL R$','ADICIONAL')),
+  frete_liquido:val(getFlexible(c,'VALOR DO FRETE','VALOR DO FRETE LIQUIDO','VALOR DO FRETE LÍQUIDO','VALOR FRETE','VALOR FRETE LIQUIDO','VALOR FRETE LÍQUIDO','VLR DO FRETE','VLR FRETE','VLR FRETE LIQUIDO','VLR FRETE LÍQUIDO','FRETE LIQUIDO','FRETE LÍQUIDO')),
+  adv:val(getFlexible(c,'ADV','VLR ADV','VALOR ADV','ADV R$','ADV R')),baf:val(getFlexible(c,'BAF','VLR BAF','VALOR BAF','BAF R$','BAF R')),
+  infraest_pedag:val(getFlexible(c,'INFRAEST. PEDAGIO','INFRAEST PEDAGIO','INFRAEST. PEDÁGIO','INFRAEST PEDÁGIO','VLR INFRAEST. PEDAGIO','VALOR INFRAEST. PEDAGIO')),
+  impostos:val(getFlexible(c,'IMPOSTOS','IMPOSTO','VLR IMPOSTOS','VALOR IMPOSTOS','IMPOSTOS R$')),frete_kg:val(get(c,'FRETE/ KG','FRETE / KG')),pct_fatur:val(get(c,'% TRANSP / FATUR','% TRANSP/FATUR')),data:get(c,'DATA CARREG','DATA CARREGAMENTO')
+ };}).filter(r=>r.nf!==''||r.valor_nf!==0||r.peso!==0||r.transportador!==''||r.extra!==0);
+}
+function parseGvizResponse(text){
+ const clean=String(text||'').replace(/^\s*\/\*O_o\*\/\s*/, '');
+ const m=clean.match(/google\.visualization\.Query\.setResponse\((.*)\)\s*;?\s*$/s);
+ if(!m)return [];
+ const obj=JSON.parse(m[1]);
+ if(obj.status&&obj.status!=='ok')throw new Error('Resposta Google inválida');
+ const table=obj.table||{}, cols=table.cols||[], data=table.rows||[];
+ if(!data.length)return [];
+ const cell=(row,i)=>{const x=(row.c||[])[i];return x&&x.v!=null?x.v:''};
+ const rowText=(row,i)=>String(cell(row,i)||'').trim();
+ // A resposta que o GViz está entregando para a aba expediçãoveld é uma tabela dinâmica:
+ // A=carregamento, B=custo transporte, C=peso, D=valor NF, E=frete/kg,
+ // F=% transporte/faturamento, G=transportadora, H=modal, I=data, J=destino, K=UF, L=qtd.
+ // Detectamos explicitamente essa estrutura. Não usamos a ordem das 70+ colunas da base,
+ // pois ela não está presente nessa resposta do Google.
+ const sample = data.slice(0,30);
+ const pivot= cols.length>=10 && sample.some(r=>{
+   const a=rowText(r,0).toLowerCase(), g=rowText(r,6), h=rowText(r,7), j=rowText(r,9);
+   return /rótulos de linha|total custo frete|média/.test(a) ||
+          (!!g && !!h && !!j && (String(cell(r,1)).trim()!=='' || String(cell(r,3)).trim()!==''));
+ });
+ if(pivot){
+   const out=[];
+   for(const row of data){
+     const transportador=rowText(row,6);
+     const modal=rowText(row,7);
+     const destino=rowText(row,9);
+     const nfLabel=rowText(row,0);
+     if(!transportador || transportador==='#N/A' || !modal || modal==='#N/A' || !destino || destino==='#N/A') continue;
+     if(!nfLabel || /total custo frete|média|rótulos de linha/i.test(nfLabel)) continue;
+     let date=rowText(row,8);
+     const dm=date.match(/^Date\((\d{4}),(\d+),(\d+)\)$/);
+     if(dm) date=`${dm[1]}-${String(Number(dm[2])+1).padStart(2,'0')}-${String(dm[3]).padStart(2,'0')}`;
+     out.push({
+       nf:nfLabel.replace(/^\s+/,''),
+       valor_nf:val(cell(row,3)),
+       peso:val(cell(row,2)),
+       volume:val(cell(row,11)),
+       transportador,
+       modal,
+       origem:'Manaus AM',
+       destino,
+       uf_dest:rowText(row,10),
+       container:nfLabel,
+       custo:val(cell(row,1)),
+       extra:0,
+       frete_liquido:val(cell(row,1)),
+       adv:0,baf:0,infraest_pedag:0,impostos:0,
+       frete_kg:val(cell(row,4)),
+       pct_fatur:val(cell(row,5)),
+       data:date
+     });
+   }
+   return out;
+ }
+ // Resposta com cabeçalhos reais.
+ const labels=cols.map(c=>String(c.label||'').trim());
+ if(labels.some(x=>/VALOR|PESO|TRANSPORT|MODAL|DESTINO|FRETE|CUSTO/i.test(x))){
+   const csv=[labels.map((x,i)=>csvQuote(x||('COL_'+i))).join(',')];
+   for(const row of data){const cells=row.c||[];csv.push(cols.map((_,i)=>{const c=cells[i];return csvQuote(!c||c.v==null?'':(c.f!=null?c.f:c.v))}).join(','));}
+   return parseCSV(csv.join('\n'));
+ }
+ return [];
+}
+function csvQuote(v){return '"'+String(v??'').replace(/"/g,'""')+'"'}
+const ONLINE_CSV_URLS = [
+ 'https://docs.google.com/spreadsheets/d/15PWGEHMXr43WyKKuN7dTBcHAGSToK8Vl/export?format=csv&gid=1475672213',
+ 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSGrC_jfP5MMcrbIDMmvZLqDxeP2n0_uZI5HdRiBO62I-BwJHdRRQQKKD-UBeyndA/pub?gid=1475672213&single=true&output=csv'
+];
+const ONLINE_CACHE_KEY = 'veldOnlineRowsV475';
+function saveOnlineCache(data){try{localStorage.setItem(ONLINE_CACHE_KEY,JSON.stringify(data));}catch(e){}}
+function loadOnlineCache(){try{const x=JSON.parse(localStorage.getItem(ONLINE_CACHE_KEY)||'null');return Array.isArray(x)?x:null}catch(e){return null}}
+async function loadOnline(){
+ if(!adminUnlocked){alert('Acesso administrativo necessário para atualizar a base.');return false;}
+ const btn=document.getElementById('btnAtualizarOnline');
+ const st=document.getElementById('autoStatus');
+ if(btn){btn.disabled=true;btn.textContent='Atualizando...';}
+ if(st)st.innerHTML='Atualização: <strong>consultando a aba ExpediçãoVeld...</strong>';
+ let lastErr='';
+ try{
+   for(const baseUrl of ONLINE_CSV_URLS){
+     try{
+       const res=await fetch(baseUrl+'&ts='+Date.now(),{cache:'no-store'});
+       if(!res.ok)throw new Error('HTTP '+res.status);
+       const text=await res.text();
+       const freshRows=parseCSV(text);
+       if(!validOnlineRows(freshRows))throw new Error('CSV sem registros compatíveis');
+       rows=freshRows;
+       saveOnlineCache(freshRows);
+       setupFilters(false);render();
+       const ss=document.getElementById('searchStatus');if(ss)ss.textContent=`${rows.length.toLocaleString('pt-BR')} registros encontrados`;
+       if(st)st.innerHTML=`Atualização: <strong>Google Sheets OK</strong> · ${rows.length.toLocaleString('pt-BR')} registros · ExpediçãoVeld`;
+       return true;
+     }catch(err){ lastErr=err; console.warn('Fonte online falhou:',baseUrl,err); }
+   }
+   throw lastErr || new Error('Nenhuma fonte online respondeu');
+ }catch(err){
+   const cached=loadOnlineCache();
+   if(cached && validOnlineRows(cached)){
+     rows=cached;setupFilters(false);render();
+     if(st)st.innerHTML=`Atualização: <strong>falhou</strong> · mantendo última base online válida (${rows.length.toLocaleString('pt-BR')} registros)`;
+   }else if(st)st.innerHTML='Atualização: <strong>falhou</strong> · mantendo a base local';
+   console.warn('Atualização online:',err);
+   return false;
+ }finally{
+   if(btn){btn.disabled=false;btn.textContent='Atualizar online';}
+ }
+}
+
+async function loadLocalCSV(){
+ try{
+   const res=await fetch('./data.csv?ts='+Date.now(),{cache:'no-store'});
+   if(!res.ok) throw new Error('data.csv não encontrado');
+   const text=await res.text();
+   const freshRows=parseCSV(text);
+   if(!validOnlineRows(freshRows)) throw new Error('data.csv inválido ou sem registros compatíveis');
+   rows=freshRows;
+   setupFilters(false);render();
+   const ss=document.getElementById('searchStatus');if(ss)ss.textContent=`${rows.length.toLocaleString('pt-BR')} registros`;
+   const st=document.getElementById('autoStatus');if(st)st.innerHTML='Base: <strong>data.csv</strong>';
+   return true;
+ }catch(err){
+   const st=document.getElementById('autoStatus');if(st)st.innerHTML='Base local: <strong>fallback incorporado</strong>';
+   setupFilters(false);render();
+   return false;
+ }
+}
+setupFilters(false);
+render();
+const initialStatus=document.getElementById('searchStatus'); if(initialStatus)initialStatus.textContent=`${filtered().length.toLocaleString('pt-BR')} registros`;
+adminUI();
+countVisitor();
+if(!loadImportedCache()) loadLocalCSV();
+</script>
+<div style="position:fixed;right:10px;bottom:8px;font:11px Arial;color:#7a8797;opacity:.8">V50 · Importação direta do Excel · contador de visitantes · SOMA financeira + CONTAGEM DISTINTA de carregamentos</div></body>
+</html>,'ADICIONAL')),
+   frete_liquido:val(getFlexible(row,'VALOR DO FRETE','VALOR DO FRETE LIQUIDO','VALOR DO FRETE LÍQUIDO','VALOR FRETE','VALOR FRETE LIQUIDO','VALOR FRETE LÍQUIDO','VLR DO FRETE','VLR FRETE','VLR FRETE LIQUIDO','VLR FRETE LÍQUIDO','FRETE LIQUIDO','FRETE LÍQUIDO')),
+   adv:val(getFlexible(row,'ADV','VLR ADV','VALOR ADV','ADV R$','ADV R')),baf:val(getFlexible(row,'BAF','VLR BAF','VALOR BAF','BAF R$','BAF R')),
+   infraest_pedag:val(getFlexible(row,'INFRAEST. PEDAGIO','INFRAEST PEDAGIO','INFRAEST. PEDÁGIO','INFRAEST PEDÁGIO','VLR INFRAEST. PEDAGIO','VALOR INFRAEST. PEDAGIO')),
+   impostos:val(getFlexible(row,'IMPOSTOS','IMPOSTO','VLR IMPOSTOS','VALOR IMPOSTOS','IMPOSTOS R$')),
+   frete_kg:val(get(row,'FRETE/ KG','FRETE / KG')),pct_fatur:val(get(row,'% TRANSP / FATUR','% TRANSP/FATUR')),
+   data:excelDate(get(row,'DATA CARREG','DATA CARREGAMENTO'))
+ })).filter(r=>r.nf!==''||r.valor_nf!==0||r.peso!==0||r.transportador!==''||r.destino!==''||r.custo!==0||r.extra!==0);
+}
+function loadImportedCache(){
+ try{const x=JSON.parse(localStorage.getItem('veldImportedRowsV50')||'null');if(Array.isArray(x)&&validOnlineRows(x)){rows=x;return true;}}catch(e){}
+ return false;
+}
+
+function normalizeHeader(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-z0-9%]+/g,' ').trim().toUpperCase()}
+function splitCSVLine(line,delimiter){
+ const out=[];let cur='',quoted=false;
+ for(let i=0;i<line.length;i++){
+   const ch=line[i];
+   if(ch==='"'){
+     if(quoted && line[i+1]==='"'){cur+='"';i++;}
+     else quoted=!quoted;
+   } else if(ch===delimiter && !quoted){out.push(cur);cur='';}
+   else cur+=ch;
+ }
+ out.push(cur); return out;
+}
+function parseCSV(t){
+ const lines=String(t||'').replace(/^\uFEFF/,'').split(/\r?\n/).filter(line=>line.trim()!=='');
+ if(!lines.length)return [];
+ const delimiter=(splitCSVLine(lines[0],',').length>=splitCSVLine(lines[0],';').length)?',':';';
+ let headerIndex=-1;
+ for(let i=0;i<Math.min(lines.length,40);i++){ const h=normalizeHeader(lines[i]); if(h.includes('VALOR NF')||h.includes('VALOR DO FRETE')||h.includes('CUSTO TRANSP')||h.includes('TRANSPORTADOR')){headerIndex=i;break;} }
+ if(headerIndex<0) return [];
+ const headers=splitCSVLine(lines[headerIndex],delimiter).map(x=>x.trim());
+ const idx={};headers.forEach((h,i)=>{const k=normalizeHeader(h);if(k)idx[k]=i});
+ const normalizedHeaders=headers.map(normalizeHeader);
+ const get=(arr,...names)=>{for(const n of names){const i=idx[normalizeHeader(n)];if(i!==undefined)return arr[i]??''}return ''};
+ const getFlexible=(arr,...names)=>{const direct=get(arr,...names);if(direct!=='')return direct;const targets=names.map(normalizeHeader).filter(Boolean);const i=normalizedHeaders.findIndex(h=>targets.some(t=>h===t||h.includes(t)||t.includes(h)));return i>=0?(arr[i]??''):''};
+ return lines.slice(headerIndex+1).map(line=>{const c=splitCSVLine(line,delimiter).map(x=>x.trim());return {
+  nf:get(c,'NF','CARREGAMENTO'),valor_nf:val(get(c,'VALOR NF','VALOR DA NF')),peso:val(get(c,'PESO')),volume:val(get(c,'QTD. BOBINAS','QTD BOBINAS')),
+  transportador:get(c,'TRANSPORTADOR','TRANSPORTADORA'),modal:get(c,'MODAL'),origem:get(c,'ORIGEM'),destino:get(c,'DESTINO'),uf_dest:get(c,'UF DEST','UF DESTINO'),container:get(c,'CONTÊINER','CONTAINER'),
+  custo:val(get(c,'CUSTO TRANSP.','CUSTO TRANSP','CUSTO TRANSPORTE')),extra:val(getFlexible(c,'VLR ADICIONAL','VLR. ADICIONAL','VALOR ADICIONAL','VALOR ADICIONAL R$','VLR ADICIONAL R$','ADICIONAL')),
+  frete_liquido:val(getFlexible(c,'VALOR DO FRETE','VALOR DO FRETE LIQUIDO','VALOR DO FRETE LÍQUIDO','VALOR FRETE','VALOR FRETE LIQUIDO','VALOR FRETE LÍQUIDO','VLR DO FRETE','VLR FRETE','VLR FRETE LIQUIDO','VLR FRETE LÍQUIDO','FRETE LIQUIDO','FRETE LÍQUIDO')),
+  adv:val(getFlexible(c,'ADV','VLR ADV','VALOR ADV','ADV R$','ADV R')),baf:val(getFlexible(c,'BAF','VLR BAF','VALOR BAF','BAF R$','BAF R')),
+  infraest_pedag:val(getFlexible(c,'INFRAEST. PEDAGIO','INFRAEST PEDAGIO','INFRAEST. PEDÁGIO','INFRAEST PEDÁGIO','VLR INFRAEST. PEDAGIO','VALOR INFRAEST. PEDAGIO')),
+  impostos:val(getFlexible(c,'IMPOSTOS','IMPOSTO','VLR IMPOSTOS','VALOR IMPOSTOS','IMPOSTOS R$')),frete_kg:val(get(c,'FRETE/ KG','FRETE / KG')),pct_fatur:val(get(c,'% TRANSP / FATUR','% TRANSP/FATUR')),data:get(c,'DATA CARREG','DATA CARREGAMENTO')
+ };}).filter(r=>r.nf!==''||r.valor_nf!==0||r.peso!==0||r.transportador!==''||r.extra!==0);
+}
+function parseGvizResponse(text){
+ const clean=String(text||'').replace(/^\s*\/\*O_o\*\/\s*/, '');
+ const m=clean.match(/google\.visualization\.Query\.setResponse\((.*)\)\s*;?\s*$/s);
+ if(!m)return [];
+ const obj=JSON.parse(m[1]);
+ if(obj.status&&obj.status!=='ok')throw new Error('Resposta Google inválida');
+ const table=obj.table||{}, cols=table.cols||[], data=table.rows||[];
+ if(!data.length)return [];
+ const cell=(row,i)=>{const x=(row.c||[])[i];return x&&x.v!=null?x.v:''};
+ const rowText=(row,i)=>String(cell(row,i)||'').trim();
+ // A resposta que o GViz está entregando para a aba expediçãoveld é uma tabela dinâmica:
+ // A=carregamento, B=custo transporte, C=peso, D=valor NF, E=frete/kg,
+ // F=% transporte/faturamento, G=transportadora, H=modal, I=data, J=destino, K=UF, L=qtd.
+ // Detectamos explicitamente essa estrutura. Não usamos a ordem das 70+ colunas da base,
+ // pois ela não está presente nessa resposta do Google.
+ const sample = data.slice(0,30);
+ const pivot= cols.length>=10 && sample.some(r=>{
+   const a=rowText(r,0).toLowerCase(), g=rowText(r,6), h=rowText(r,7), j=rowText(r,9);
+   return /rótulos de linha|total custo frete|média/.test(a) ||
+          (!!g && !!h && !!j && (String(cell(r,1)).trim()!=='' || String(cell(r,3)).trim()!==''));
+ });
+ if(pivot){
+   const out=[];
+   for(const row of data){
+     const transportador=rowText(row,6);
+     const modal=rowText(row,7);
+     const destino=rowText(row,9);
+     const nfLabel=rowText(row,0);
+     if(!transportador || transportador==='#N/A' || !modal || modal==='#N/A' || !destino || destino==='#N/A') continue;
+     if(!nfLabel || /total custo frete|média|rótulos de linha/i.test(nfLabel)) continue;
+     let date=rowText(row,8);
+     const dm=date.match(/^Date\((\d{4}),(\d+),(\d+)\)$/);
+     if(dm) date=`${dm[1]}-${String(Number(dm[2])+1).padStart(2,'0')}-${String(dm[3]).padStart(2,'0')}`;
+     out.push({
+       nf:nfLabel.replace(/^\s+/,''),
+       valor_nf:val(cell(row,3)),
+       peso:val(cell(row,2)),
+       volume:val(cell(row,11)),
+       transportador,
+       modal,
+       origem:'Manaus AM',
+       destino,
+       uf_dest:rowText(row,10),
+       container:nfLabel,
+       custo:val(cell(row,1)),
+       extra:0,
+       frete_liquido:val(cell(row,1)),
+       adv:0,baf:0,infraest_pedag:0,impostos:0,
+       frete_kg:val(cell(row,4)),
+       pct_fatur:val(cell(row,5)),
+       data:date
+     });
+   }
+   return out;
+ }
+ // Resposta com cabeçalhos reais.
+ const labels=cols.map(c=>String(c.label||'').trim());
+ if(labels.some(x=>/VALOR|PESO|TRANSPORT|MODAL|DESTINO|FRETE|CUSTO/i.test(x))){
+   const csv=[labels.map((x,i)=>csvQuote(x||('COL_'+i))).join(',')];
+   for(const row of data){const cells=row.c||[];csv.push(cols.map((_,i)=>{const c=cells[i];return csvQuote(!c||c.v==null?'':(c.f!=null?c.f:c.v))}).join(','));}
+   return parseCSV(csv.join('\n'));
+ }
+ return [];
+}
+function csvQuote(v){return '"'+String(v??'').replace(/"/g,'""')+'"'}
+const ONLINE_CSV_URLS = [
+ 'https://docs.google.com/spreadsheets/d/15PWGEHMXr43WyKKuN7dTBcHAGSToK8Vl/export?format=csv&gid=1475672213',
+ 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSGrC_jfP5MMcrbIDMmvZLqDxeP2n0_uZI5HdRiBO62I-BwJHdRRQQKKD-UBeyndA/pub?gid=1475672213&single=true&output=csv'
+];
+const ONLINE_CACHE_KEY = 'veldOnlineRowsV475';
+function saveOnlineCache(data){try{localStorage.setItem(ONLINE_CACHE_KEY,JSON.stringify(data));}catch(e){}}
+function loadOnlineCache(){try{const x=JSON.parse(localStorage.getItem(ONLINE_CACHE_KEY)||'null');return Array.isArray(x)?x:null}catch(e){return null}}
+async function loadOnline(){
+ if(!adminUnlocked){alert('Acesso administrativo necessário para atualizar a base.');return false;}
+ const btn=document.getElementById('btnAtualizarOnline');
+ const st=document.getElementById('autoStatus');
+ if(btn){btn.disabled=true;btn.textContent='Atualizando...';}
+ if(st)st.innerHTML='Atualização: <strong>consultando a aba ExpediçãoVeld...</strong>';
+ let lastErr='';
+ try{
+   for(const baseUrl of ONLINE_CSV_URLS){
+     try{
+       const res=await fetch(baseUrl+'&ts='+Date.now(),{cache:'no-store'});
+       if(!res.ok)throw new Error('HTTP '+res.status);
+       const text=await res.text();
+       const freshRows=parseCSV(text);
+       if(!validOnlineRows(freshRows))throw new Error('CSV sem registros compatíveis');
+       rows=freshRows;
+       saveOnlineCache(freshRows);
+       setupFilters(false);render();
+       const ss=document.getElementById('searchStatus');if(ss)ss.textContent=`${rows.length.toLocaleString('pt-BR')} registros encontrados`;
+       if(st)st.innerHTML=`Atualização: <strong>Google Sheets OK</strong> · ${rows.length.toLocaleString('pt-BR')} registros · ExpediçãoVeld`;
+       return true;
+     }catch(err){ lastErr=err; console.warn('Fonte online falhou:',baseUrl,err); }
+   }
+   throw lastErr || new Error('Nenhuma fonte online respondeu');
+ }catch(err){
+   const cached=loadOnlineCache();
+   if(cached && validOnlineRows(cached)){
+     rows=cached;setupFilters(false);render();
+     if(st)st.innerHTML=`Atualização: <strong>falhou</strong> · mantendo última base online válida (${rows.length.toLocaleString('pt-BR')} registros)`;
+   }else if(st)st.innerHTML='Atualização: <strong>falhou</strong> · mantendo a base local';
+   console.warn('Atualização online:',err);
+   return false;
+ }finally{
+   if(btn){btn.disabled=false;btn.textContent='Atualizar online';}
+ }
+}
+
+async function loadLocalCSV(){
+ try{
+   const res=await fetch('./data.csv?ts='+Date.now(),{cache:'no-store'});
+   if(!res.ok) throw new Error('data.csv não encontrado');
+   const text=await res.text();
+   const freshRows=parseCSV(text);
+   if(!validOnlineRows(freshRows)) throw new Error('data.csv inválido ou sem registros compatíveis');
+   rows=freshRows;
+   setupFilters(false);render();
+   const ss=document.getElementById('searchStatus');if(ss)ss.textContent=`${rows.length.toLocaleString('pt-BR')} registros`;
+   const st=document.getElementById('autoStatus');if(st)st.innerHTML='Base: <strong>data.csv</strong>';
+   return true;
+ }catch(err){
+   const st=document.getElementById('autoStatus');if(st)st.innerHTML='Base local: <strong>fallback incorporado</strong>';
+   setupFilters(false);render();
+   return false;
+ }
+}
+setupFilters(false);
+render();
+const initialStatus=document.getElementById('searchStatus'); if(initialStatus)initialStatus.textContent=`${filtered().length.toLocaleString('pt-BR')} registros`;
+adminUI();
+countVisitor();
+if(!loadImportedCache()) loadLocalCSV();
+</script>
+<div style="position:fixed;right:10px;bottom:8px;font:11px Arial;color:#7a8797;opacity:.8">V50 · Importação direta do Excel · contador de visitantes · SOMA financeira + CONTAGEM DISTINTA de carregamentos</div></body>
+</html>,'ADICIONAL')),
+   adv:val(getFlexible(row,'ADV','VLR ADV','VALOR ADV','ADV R$','ADV R')),baf:val(getFlexible(row,'BAF','VLR BAF','VALOR BAF','BAF R$','BAF R')),
+   infraest_pedag:val(getFlexible(row,'INFRAEST. PEDAGIO','INFRAEST PEDAGIO','INFRAEST. PEDÁGIO','INFRAEST PEDÁGIO','VLR INFRAEST. PEDAGIO','VALOR INFRAEST. PEDAGIO')),
+   impostos:val(getFlexible(row,'IMPOSTOS','IMPOSTO','VLR IMPOSTOS','VALOR IMPOSTOS','IMPOSTOS R$')),
+   frete_kg:val(get(row,'FRETE/ KG','FRETE / KG')),pct_fatur:val(get(row,'% TRANSP / FATUR','% TRANSP/FATUR')),
+   data:excelDate(get(row,'DATA CARREG','DATA CARREGAMENTO'))
+ })).filter(r=>r.nf!==''||r.valor_nf!==0||r.peso!==0||r.transportador!==''||r.destino!==''||r.custo!==0||r.extra!==0);
+}
+function loadImportedCache(){
+ try{const x=JSON.parse(localStorage.getItem('veldImportedRowsV50')||'null');if(Array.isArray(x)&&validOnlineRows(x)){rows=x;return true;}}catch(e){}
+ return false;
+}
+
+function normalizeHeader(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-z0-9%]+/g,' ').trim().toUpperCase()}
+function splitCSVLine(line,delimiter){
+ const out=[];let cur='',quoted=false;
+ for(let i=0;i<line.length;i++){
+   const ch=line[i];
+   if(ch==='"'){
+     if(quoted && line[i+1]==='"'){cur+='"';i++;}
+     else quoted=!quoted;
+   } else if(ch===delimiter && !quoted){out.push(cur);cur='';}
+   else cur+=ch;
+ }
+ out.push(cur); return out;
+}
+function parseCSV(t){
+ const lines=String(t||'').replace(/^\uFEFF/,'').split(/\r?\n/).filter(line=>line.trim()!=='');
+ if(!lines.length)return [];
+ const delimiter=(splitCSVLine(lines[0],',').length>=splitCSVLine(lines[0],';').length)?',':';';
+ let headerIndex=-1;
+ for(let i=0;i<Math.min(lines.length,40);i++){ const h=normalizeHeader(lines[i]); if(h.includes('VALOR NF')||h.includes('VALOR DO FRETE')||h.includes('CUSTO TRANSP')||h.includes('TRANSPORTADOR')){headerIndex=i;break;} }
+ if(headerIndex<0) return [];
+ const headers=splitCSVLine(lines[headerIndex],delimiter).map(x=>x.trim());
+ const idx={};headers.forEach((h,i)=>{const k=normalizeHeader(h);if(k)idx[k]=i});
+ const normalizedHeaders=headers.map(normalizeHeader);
+ const get=(arr,...names)=>{for(const n of names){const i=idx[normalizeHeader(n)];if(i!==undefined)return arr[i]??''}return ''};
+ const getFlexible=(arr,...names)=>{const direct=get(arr,...names);if(direct!=='')return direct;const targets=names.map(normalizeHeader).filter(Boolean);const i=normalizedHeaders.findIndex(h=>targets.some(t=>h===t||h.includes(t)||t.includes(h)));return i>=0?(arr[i]??''):''};
+ return lines.slice(headerIndex+1).map(line=>{const c=splitCSVLine(line,delimiter).map(x=>x.trim());return {
+  nf:get(c,'NF','CARREGAMENTO'),valor_nf:val(get(c,'VALOR NF','VALOR DA NF')),peso:val(get(c,'PESO')),volume:val(get(c,'QTD. BOBINAS','QTD BOBINAS')),
+  transportador:get(c,'TRANSPORTADOR','TRANSPORTADORA'),modal:get(c,'MODAL'),origem:get(c,'ORIGEM'),destino:get(c,'DESTINO'),uf_dest:get(c,'UF DEST','UF DESTINO'),container:get(c,'CONTÊINER','CONTAINER'),
+  custo:valCost(get(c,'CUSTO TRANSP.','CUSTO TRANSP','CUSTO TRANSPORTE')),extra:valCost(getFlexible(c,'VLR ADICIONAL','VLR. ADICIONAL','VALOR ADICIONAL','VALOR ADICIONAL R$','VLR ADICIONAL R$','ADICIONAL')),
+  frete_liquido:val(getFlexible(c,'VALOR DO FRETE','VALOR DO FRETE LIQUIDO','VALOR DO FRETE LÍQUIDO','VALOR FRETE','VALOR FRETE LIQUIDO','VALOR FRETE LÍQUIDO','VLR DO FRETE','VLR FRETE','VLR FRETE LIQUIDO','VLR FRETE LÍQUIDO','FRETE LIQUIDO','FRETE LÍQUIDO')),
+  adv:val(getFlexible(c,'ADV','VLR ADV','VALOR ADV','ADV R$','ADV R')),baf:val(getFlexible(c,'BAF','VLR BAF','VALOR BAF','BAF R$','BAF R')),
+  infraest_pedag:val(getFlexible(c,'INFRAEST. PEDAGIO','INFRAEST PEDAGIO','INFRAEST. PEDÁGIO','INFRAEST PEDÁGIO','VLR INFRAEST. PEDAGIO','VALOR INFRAEST. PEDAGIO')),
+  impostos:val(getFlexible(c,'IMPOSTOS','IMPOSTO','VLR IMPOSTOS','VALOR IMPOSTOS','IMPOSTOS R$')),frete_kg:val(get(c,'FRETE/ KG','FRETE / KG')),pct_fatur:val(get(c,'% TRANSP / FATUR','% TRANSP/FATUR')),data:get(c,'DATA CARREG','DATA CARREGAMENTO')
+ };}).filter(r=>r.nf!==''||r.valor_nf!==0||r.peso!==0||r.transportador!==''||r.extra!==0);
+}
+function parseGvizResponse(text){
+ const clean=String(text||'').replace(/^\s*\/\*O_o\*\/\s*/, '');
+ const m=clean.match(/google\.visualization\.Query\.setResponse\((.*)\)\s*;?\s*$/s);
+ if(!m)return [];
+ const obj=JSON.parse(m[1]);
+ if(obj.status&&obj.status!=='ok')throw new Error('Resposta Google inválida');
+ const table=obj.table||{}, cols=table.cols||[], data=table.rows||[];
+ if(!data.length)return [];
+ const cell=(row,i)=>{const x=(row.c||[])[i];return x&&x.v!=null?x.v:''};
+ const rowText=(row,i)=>String(cell(row,i)||'').trim();
+ // A resposta que o GViz está entregando para a aba expediçãoveld é uma tabela dinâmica:
+ // A=carregamento, B=custo transporte, C=peso, D=valor NF, E=frete/kg,
+ // F=% transporte/faturamento, G=transportadora, H=modal, I=data, J=destino, K=UF, L=qtd.
+ // Detectamos explicitamente essa estrutura. Não usamos a ordem das 70+ colunas da base,
+ // pois ela não está presente nessa resposta do Google.
+ const sample = data.slice(0,30);
+ const pivot= cols.length>=10 && sample.some(r=>{
+   const a=rowText(r,0).toLowerCase(), g=rowText(r,6), h=rowText(r,7), j=rowText(r,9);
+   return /rótulos de linha|total custo frete|média/.test(a) ||
+          (!!g && !!h && !!j && (String(cell(r,1)).trim()!=='' || String(cell(r,3)).trim()!==''));
+ });
+ if(pivot){
+   const out=[];
+   for(const row of data){
+     const transportador=rowText(row,6);
+     const modal=rowText(row,7);
+     const destino=rowText(row,9);
+     const nfLabel=rowText(row,0);
+     if(!transportador || transportador==='#N/A' || !modal || modal==='#N/A' || !destino || destino==='#N/A') continue;
+     if(!nfLabel || /total custo frete|média|rótulos de linha/i.test(nfLabel)) continue;
+     let date=rowText(row,8);
+     const dm=date.match(/^Date\((\d{4}),(\d+),(\d+)\)$/);
+     if(dm) date=`${dm[1]}-${String(Number(dm[2])+1).padStart(2,'0')}-${String(dm[3]).padStart(2,'0')}`;
+     out.push({
+       nf:nfLabel.replace(/^\s+/,''),
+       valor_nf:val(cell(row,3)),
+       peso:val(cell(row,2)),
+       volume:val(cell(row,11)),
+       transportador,
+       modal,
+       origem:'Manaus AM',
+       destino,
+       uf_dest:rowText(row,10),
+       container:nfLabel,
+       custo:val(cell(row,1)),
+       extra:0,
+       frete_liquido:val(cell(row,1)),
+       adv:0,baf:0,infraest_pedag:0,impostos:0,
+       frete_kg:val(cell(row,4)),
+       pct_fatur:val(cell(row,5)),
+       data:date
+     });
+   }
+   return out;
+ }
+ // Resposta com cabeçalhos reais.
+ const labels=cols.map(c=>String(c.label||'').trim());
+ if(labels.some(x=>/VALOR|PESO|TRANSPORT|MODAL|DESTINO|FRETE|CUSTO/i.test(x))){
+   const csv=[labels.map((x,i)=>csvQuote(x||('COL_'+i))).join(',')];
+   for(const row of data){const cells=row.c||[];csv.push(cols.map((_,i)=>{const c=cells[i];return csvQuote(!c||c.v==null?'':(c.f!=null?c.f:c.v))}).join(','));}
+   return parseCSV(csv.join('\n'));
+ }
+ return [];
+}
+function csvQuote(v){return '"'+String(v??'').replace(/"/g,'""')+'"'}
+const ONLINE_CSV_URLS = [
+ 'https://docs.google.com/spreadsheets/d/15PWGEHMXr43WyKKuN7dTBcHAGSToK8Vl/export?format=csv&gid=1475672213',
+ 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSGrC_jfP5MMcrbIDMmvZLqDxeP2n0_uZI5HdRiBO62I-BwJHdRRQQKKD-UBeyndA/pub?gid=1475672213&single=true&output=csv'
+];
+const ONLINE_CACHE_KEY = 'veldOnlineRowsV475';
+function saveOnlineCache(data){try{localStorage.setItem(ONLINE_CACHE_KEY,JSON.stringify(data));}catch(e){}}
+function loadOnlineCache(){try{const x=JSON.parse(localStorage.getItem(ONLINE_CACHE_KEY)||'null');return Array.isArray(x)?x:null}catch(e){return null}}
+async function loadOnline(){
+ if(!adminUnlocked){alert('Acesso administrativo necessário para atualizar a base.');return false;}
+ const btn=document.getElementById('btnAtualizarOnline');
+ const st=document.getElementById('autoStatus');
+ if(btn){btn.disabled=true;btn.textContent='Atualizando...';}
+ if(st)st.innerHTML='Atualização: <strong>consultando a aba ExpediçãoVeld...</strong>';
+ let lastErr='';
+ try{
+   for(const baseUrl of ONLINE_CSV_URLS){
+     try{
+       const res=await fetch(baseUrl+'&ts='+Date.now(),{cache:'no-store'});
+       if(!res.ok)throw new Error('HTTP '+res.status);
+       const text=await res.text();
+       const freshRows=parseCSV(text);
+       if(!validOnlineRows(freshRows))throw new Error('CSV sem registros compatíveis');
+       rows=freshRows;
+       saveOnlineCache(freshRows);
+       setupFilters(false);render();
+       const ss=document.getElementById('searchStatus');if(ss)ss.textContent=`${rows.length.toLocaleString('pt-BR')} registros encontrados`;
+       if(st)st.innerHTML=`Atualização: <strong>Google Sheets OK</strong> · ${rows.length.toLocaleString('pt-BR')} registros · ExpediçãoVeld`;
+       return true;
+     }catch(err){ lastErr=err; console.warn('Fonte online falhou:',baseUrl,err); }
+   }
+   throw lastErr || new Error('Nenhuma fonte online respondeu');
+ }catch(err){
+   const cached=loadOnlineCache();
+   if(cached && validOnlineRows(cached)){
+     rows=cached;setupFilters(false);render();
+     if(st)st.innerHTML=`Atualização: <strong>falhou</strong> · mantendo última base online válida (${rows.length.toLocaleString('pt-BR')} registros)`;
+   }else if(st)st.innerHTML='Atualização: <strong>falhou</strong> · mantendo a base local';
+   console.warn('Atualização online:',err);
+   return false;
+ }finally{
+   if(btn){btn.disabled=false;btn.textContent='Atualizar online';}
+ }
+}
+
+async function loadLocalCSV(){
+ try{
+   const res=await fetch('./data.csv?ts='+Date.now(),{cache:'no-store'});
+   if(!res.ok) throw new Error('data.csv não encontrado');
+   const text=await res.text();
+   const freshRows=parseCSV(text);
+   if(!validOnlineRows(freshRows)) throw new Error('data.csv inválido ou sem registros compatíveis');
+   rows=freshRows;
+   setupFilters(false);render();
+   const ss=document.getElementById('searchStatus');if(ss)ss.textContent=`${rows.length.toLocaleString('pt-BR')} registros`;
+   const st=document.getElementById('autoStatus');if(st)st.innerHTML='Base: <strong>data.csv</strong>';
+   return true;
+ }catch(err){
+   const st=document.getElementById('autoStatus');if(st)st.innerHTML='Base local: <strong>fallback incorporado</strong>';
+   setupFilters(false);render();
+   return false;
+ }
+}
+setupFilters(false);
+render();
+const initialStatus=document.getElementById('searchStatus'); if(initialStatus)initialStatus.textContent=`${filtered().length.toLocaleString('pt-BR')} registros`;
+adminUI();
+countVisitor();
+if(!loadImportedCache()) loadLocalCSV();
+</script>
+<div style="position:fixed;right:10px;bottom:8px;font:11px Arial;color:#7a8797;opacity:.8">V50 · Importação direta do Excel · contador de visitantes · SOMA financeira + CONTAGEM DISTINTA de carregamentos</div></body>
+</html>,'VLR ADICIONAL R,'VALOR DO FRETE LIQUIDO','VALOR DO FRETE LÍQUIDO','VALOR FRETE','VALOR FRETE LIQUIDO','VALOR FRETE LÍQUIDO','VLR DO FRETE','VLR FRETE','VLR FRETE LIQUIDO','VLR FRETE LÍQUIDO','FRETE LIQUIDO','FRETE LÍQUIDO')),
+   adv:val(getFlexible(row,'ADV','VLR ADV','VALOR ADV','ADV R$','ADV R')),baf:val(getFlexible(row,'BAF','VLR BAF','VALOR BAF','BAF R$','BAF R')),
+   infraest_pedag:val(getFlexible(row,'INFRAEST. PEDAGIO','INFRAEST PEDAGIO','INFRAEST. PEDÁGIO','INFRAEST PEDÁGIO','VLR INFRAEST. PEDAGIO','VALOR INFRAEST. PEDAGIO')),
+   impostos:val(getFlexible(row,'IMPOSTOS','IMPOSTO','VLR IMPOSTOS','VALOR IMPOSTOS','IMPOSTOS R$')),
+   frete_kg:val(get(row,'FRETE/ KG','FRETE / KG')),pct_fatur:val(get(row,'% TRANSP / FATUR','% TRANSP/FATUR')),
+   data:excelDate(get(row,'DATA CARREG','DATA CARREGAMENTO'))
+ })).filter(r=>r.nf!==''||r.valor_nf!==0||r.peso!==0||r.transportador!==''||r.destino!==''||r.custo!==0||r.extra!==0);
+}
+function loadImportedCache(){
+ try{const x=JSON.parse(localStorage.getItem('veldImportedRowsV50')||'null');if(Array.isArray(x)&&validOnlineRows(x)){rows=x;return true;}}catch(e){}
+ return false;
+}
+
+function normalizeHeader(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-z0-9%]+/g,' ').trim().toUpperCase()}
+function splitCSVLine(line,delimiter){
+ const out=[];let cur='',quoted=false;
+ for(let i=0;i<line.length;i++){
+   const ch=line[i];
+   if(ch==='"'){
+     if(quoted && line[i+1]==='"'){cur+='"';i++;}
+     else quoted=!quoted;
+   } else if(ch===delimiter && !quoted){out.push(cur);cur='';}
+   else cur+=ch;
+ }
+ out.push(cur); return out;
+}
+function parseCSV(t){
+ const lines=String(t||'').replace(/^\uFEFF/,'').split(/\r?\n/).filter(line=>line.trim()!=='');
+ if(!lines.length)return [];
+ const delimiter=(splitCSVLine(lines[0],',').length>=splitCSVLine(lines[0],';').length)?',':';';
+ let headerIndex=-1;
+ for(let i=0;i<Math.min(lines.length,40);i++){ const h=normalizeHeader(lines[i]); if(h.includes('VALOR NF')||h.includes('VALOR DO FRETE')||h.includes('CUSTO TRANSP')||h.includes('TRANSPORTADOR')){headerIndex=i;break;} }
+ if(headerIndex<0) return [];
+ const headers=splitCSVLine(lines[headerIndex],delimiter).map(x=>x.trim());
+ const idx={};headers.forEach((h,i)=>{const k=normalizeHeader(h);if(k)idx[k]=i});
+ const normalizedHeaders=headers.map(normalizeHeader);
+ const get=(arr,...names)=>{for(const n of names){const i=idx[normalizeHeader(n)];if(i!==undefined)return arr[i]??''}return ''};
+ const getFlexible=(arr,...names)=>{const direct=get(arr,...names);if(direct!=='')return direct;const targets=names.map(normalizeHeader).filter(Boolean);const i=normalizedHeaders.findIndex(h=>targets.some(t=>h===t||h.includes(t)||t.includes(h)));return i>=0?(arr[i]??''):''};
+ return lines.slice(headerIndex+1).map(line=>{const c=splitCSVLine(line,delimiter).map(x=>x.trim());return {
+  nf:get(c,'NF','CARREGAMENTO'),valor_nf:val(get(c,'VALOR NF','VALOR DA NF')),peso:val(get(c,'PESO')),volume:val(get(c,'QTD. BOBINAS','QTD BOBINAS')),
+  transportador:get(c,'TRANSPORTADOR','TRANSPORTADORA'),modal:get(c,'MODAL'),origem:get(c,'ORIGEM'),destino:get(c,'DESTINO'),uf_dest:get(c,'UF DEST','UF DESTINO'),container:get(c,'CONTÊINER','CONTAINER'),
+  custo:val(get(c,'CUSTO TRANSP.','CUSTO TRANSP','CUSTO TRANSPORTE')),extra:val(getFlexible(c,'VLR ADICIONAL','VLR. ADICIONAL','VALOR ADICIONAL','VALOR ADICIONAL R$','VLR ADICIONAL R$','ADICIONAL')),
+  frete_liquido:val(getFlexible(c,'VALOR DO FRETE','VALOR DO FRETE LIQUIDO','VALOR DO FRETE LÍQUIDO','VALOR FRETE','VALOR FRETE LIQUIDO','VALOR FRETE LÍQUIDO','VLR DO FRETE','VLR FRETE','VLR FRETE LIQUIDO','VLR FRETE LÍQUIDO','FRETE LIQUIDO','FRETE LÍQUIDO')),
+  adv:val(getFlexible(c,'ADV','VLR ADV','VALOR ADV','ADV R$','ADV R')),baf:val(getFlexible(c,'BAF','VLR BAF','VALOR BAF','BAF R$','BAF R')),
+  infraest_pedag:val(getFlexible(c,'INFRAEST. PEDAGIO','INFRAEST PEDAGIO','INFRAEST. PEDÁGIO','INFRAEST PEDÁGIO','VLR INFRAEST. PEDAGIO','VALOR INFRAEST. PEDAGIO')),
+  impostos:val(getFlexible(c,'IMPOSTOS','IMPOSTO','VLR IMPOSTOS','VALOR IMPOSTOS','IMPOSTOS R$')),frete_kg:val(get(c,'FRETE/ KG','FRETE / KG')),pct_fatur:val(get(c,'% TRANSP / FATUR','% TRANSP/FATUR')),data:get(c,'DATA CARREG','DATA CARREGAMENTO')
+ };}).filter(r=>r.nf!==''||r.valor_nf!==0||r.peso!==0||r.transportador!==''||r.extra!==0);
+}
+function parseGvizResponse(text){
+ const clean=String(text||'').replace(/^\s*\/\*O_o\*\/\s*/, '');
+ const m=clean.match(/google\.visualization\.Query\.setResponse\((.*)\)\s*;?\s*$/s);
+ if(!m)return [];
+ const obj=JSON.parse(m[1]);
+ if(obj.status&&obj.status!=='ok')throw new Error('Resposta Google inválida');
+ const table=obj.table||{}, cols=table.cols||[], data=table.rows||[];
+ if(!data.length)return [];
+ const cell=(row,i)=>{const x=(row.c||[])[i];return x&&x.v!=null?x.v:''};
+ const rowText=(row,i)=>String(cell(row,i)||'').trim();
+ // A resposta que o GViz está entregando para a aba expediçãoveld é uma tabela dinâmica:
+ // A=carregamento, B=custo transporte, C=peso, D=valor NF, E=frete/kg,
+ // F=% transporte/faturamento, G=transportadora, H=modal, I=data, J=destino, K=UF, L=qtd.
+ // Detectamos explicitamente essa estrutura. Não usamos a ordem das 70+ colunas da base,
+ // pois ela não está presente nessa resposta do Google.
+ const sample = data.slice(0,30);
+ const pivot= cols.length>=10 && sample.some(r=>{
+   const a=rowText(r,0).toLowerCase(), g=rowText(r,6), h=rowText(r,7), j=rowText(r,9);
+   return /rótulos de linha|total custo frete|média/.test(a) ||
+          (!!g && !!h && !!j && (String(cell(r,1)).trim()!=='' || String(cell(r,3)).trim()!==''));
+ });
+ if(pivot){
+   const out=[];
+   for(const row of data){
+     const transportador=rowText(row,6);
+     const modal=rowText(row,7);
+     const destino=rowText(row,9);
+     const nfLabel=rowText(row,0);
+     if(!transportador || transportador==='#N/A' || !modal || modal==='#N/A' || !destino || destino==='#N/A') continue;
+     if(!nfLabel || /total custo frete|média|rótulos de linha/i.test(nfLabel)) continue;
+     let date=rowText(row,8);
+     const dm=date.match(/^Date\((\d{4}),(\d+),(\d+)\)$/);
+     if(dm) date=`${dm[1]}-${String(Number(dm[2])+1).padStart(2,'0')}-${String(dm[3]).padStart(2,'0')}`;
+     out.push({
+       nf:nfLabel.replace(/^\s+/,''),
+       valor_nf:val(cell(row,3)),
+       peso:val(cell(row,2)),
+       volume:val(cell(row,11)),
+       transportador,
+       modal,
+       origem:'Manaus AM',
+       destino,
+       uf_dest:rowText(row,10),
+       container:nfLabel,
+       custo:val(cell(row,1)),
+       extra:0,
+       frete_liquido:val(cell(row,1)),
+       adv:0,baf:0,infraest_pedag:0,impostos:0,
+       frete_kg:val(cell(row,4)),
+       pct_fatur:val(cell(row,5)),
+       data:date
+     });
+   }
+   return out;
+ }
+ // Resposta com cabeçalhos reais.
+ const labels=cols.map(c=>String(c.label||'').trim());
+ if(labels.some(x=>/VALOR|PESO|TRANSPORT|MODAL|DESTINO|FRETE|CUSTO/i.test(x))){
+   const csv=[labels.map((x,i)=>csvQuote(x||('COL_'+i))).join(',')];
+   for(const row of data){const cells=row.c||[];csv.push(cols.map((_,i)=>{const c=cells[i];return csvQuote(!c||c.v==null?'':(c.f!=null?c.f:c.v))}).join(','));}
+   return parseCSV(csv.join('\n'));
+ }
+ return [];
+}
+function csvQuote(v){return '"'+String(v??'').replace(/"/g,'""')+'"'}
+const ONLINE_CSV_URLS = [
+ 'https://docs.google.com/spreadsheets/d/15PWGEHMXr43WyKKuN7dTBcHAGSToK8Vl/export?format=csv&gid=1475672213',
+ 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSGrC_jfP5MMcrbIDMmvZLqDxeP2n0_uZI5HdRiBO62I-BwJHdRRQQKKD-UBeyndA/pub?gid=1475672213&single=true&output=csv'
+];
+const ONLINE_CACHE_KEY = 'veldOnlineRowsV475';
+function saveOnlineCache(data){try{localStorage.setItem(ONLINE_CACHE_KEY,JSON.stringify(data));}catch(e){}}
+function loadOnlineCache(){try{const x=JSON.parse(localStorage.getItem(ONLINE_CACHE_KEY)||'null');return Array.isArray(x)?x:null}catch(e){return null}}
+async function loadOnline(){
+ if(!adminUnlocked){alert('Acesso administrativo necessário para atualizar a base.');return false;}
+ const btn=document.getElementById('btnAtualizarOnline');
+ const st=document.getElementById('autoStatus');
+ if(btn){btn.disabled=true;btn.textContent='Atualizando...';}
+ if(st)st.innerHTML='Atualização: <strong>consultando a aba ExpediçãoVeld...</strong>';
+ let lastErr='';
+ try{
+   for(const baseUrl of ONLINE_CSV_URLS){
+     try{
+       const res=await fetch(baseUrl+'&ts='+Date.now(),{cache:'no-store'});
+       if(!res.ok)throw new Error('HTTP '+res.status);
+       const text=await res.text();
+       const freshRows=parseCSV(text);
+       if(!validOnlineRows(freshRows))throw new Error('CSV sem registros compatíveis');
+       rows=freshRows;
+       saveOnlineCache(freshRows);
+       setupFilters(false);render();
+       const ss=document.getElementById('searchStatus');if(ss)ss.textContent=`${rows.length.toLocaleString('pt-BR')} registros encontrados`;
+       if(st)st.innerHTML=`Atualização: <strong>Google Sheets OK</strong> · ${rows.length.toLocaleString('pt-BR')} registros · ExpediçãoVeld`;
+       return true;
+     }catch(err){ lastErr=err; console.warn('Fonte online falhou:',baseUrl,err); }
+   }
+   throw lastErr || new Error('Nenhuma fonte online respondeu');
+ }catch(err){
+   const cached=loadOnlineCache();
+   if(cached && validOnlineRows(cached)){
+     rows=cached;setupFilters(false);render();
+     if(st)st.innerHTML=`Atualização: <strong>falhou</strong> · mantendo última base online válida (${rows.length.toLocaleString('pt-BR')} registros)`;
+   }else if(st)st.innerHTML='Atualização: <strong>falhou</strong> · mantendo a base local';
+   console.warn('Atualização online:',err);
+   return false;
+ }finally{
+   if(btn){btn.disabled=false;btn.textContent='Atualizar online';}
+ }
+}
+
+async function loadLocalCSV(){
+ try{
+   const res=await fetch('./data.csv?ts='+Date.now(),{cache:'no-store'});
+   if(!res.ok) throw new Error('data.csv não encontrado');
+   const text=await res.text();
+   const freshRows=parseCSV(text);
+   if(!validOnlineRows(freshRows)) throw new Error('data.csv inválido ou sem registros compatíveis');
+   rows=freshRows;
+   setupFilters(false);render();
+   const ss=document.getElementById('searchStatus');if(ss)ss.textContent=`${rows.length.toLocaleString('pt-BR')} registros`;
+   const st=document.getElementById('autoStatus');if(st)st.innerHTML='Base: <strong>data.csv</strong>';
+   return true;
+ }catch(err){
+   const st=document.getElementById('autoStatus');if(st)st.innerHTML='Base local: <strong>fallback incorporado</strong>';
+   setupFilters(false);render();
+   return false;
+ }
+}
+setupFilters(false);
+render();
+const initialStatus=document.getElementById('searchStatus'); if(initialStatus)initialStatus.textContent=`${filtered().length.toLocaleString('pt-BR')} registros`;
+adminUI();
+countVisitor();
+if(!loadImportedCache()) loadLocalCSV();
+</script>
+<div style="position:fixed;right:10px;bottom:8px;font:11px Arial;color:#7a8797;opacity:.8">V50 · Importação direta do Excel · contador de visitantes · SOMA financeira + CONTAGEM DISTINTA de carregamentos</div></body>
+</html>,'ADICIONAL')),
+   frete_liquido:val(getFlexible(row,'VALOR DO FRETE','VALOR DO FRETE LIQUIDO','VALOR DO FRETE LÍQUIDO','VALOR FRETE','VALOR FRETE LIQUIDO','VALOR FRETE LÍQUIDO','VLR DO FRETE','VLR FRETE','VLR FRETE LIQUIDO','VLR FRETE LÍQUIDO','FRETE LIQUIDO','FRETE LÍQUIDO')),
+   adv:val(getFlexible(row,'ADV','VLR ADV','VALOR ADV','ADV R$','ADV R')),baf:val(getFlexible(row,'BAF','VLR BAF','VALOR BAF','BAF R$','BAF R')),
+   infraest_pedag:val(getFlexible(row,'INFRAEST. PEDAGIO','INFRAEST PEDAGIO','INFRAEST. PEDÁGIO','INFRAEST PEDÁGIO','VLR INFRAEST. PEDAGIO','VALOR INFRAEST. PEDAGIO')),
+   impostos:val(getFlexible(row,'IMPOSTOS','IMPOSTO','VLR IMPOSTOS','VALOR IMPOSTOS','IMPOSTOS R$')),
+   frete_kg:val(get(row,'FRETE/ KG','FRETE / KG')),pct_fatur:val(get(row,'% TRANSP / FATUR','% TRANSP/FATUR')),
+   data:excelDate(get(row,'DATA CARREG','DATA CARREGAMENTO'))
+ })).filter(r=>r.nf!==''||r.valor_nf!==0||r.peso!==0||r.transportador!==''||r.destino!==''||r.custo!==0||r.extra!==0);
+}
+function loadImportedCache(){
+ try{const x=JSON.parse(localStorage.getItem('veldImportedRowsV50')||'null');if(Array.isArray(x)&&validOnlineRows(x)){rows=x;return true;}}catch(e){}
+ return false;
+}
+
+function normalizeHeader(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-z0-9%]+/g,' ').trim().toUpperCase()}
+function splitCSVLine(line,delimiter){
+ const out=[];let cur='',quoted=false;
+ for(let i=0;i<line.length;i++){
+   const ch=line[i];
+   if(ch==='"'){
+     if(quoted && line[i+1]==='"'){cur+='"';i++;}
+     else quoted=!quoted;
+   } else if(ch===delimiter && !quoted){out.push(cur);cur='';}
+   else cur+=ch;
+ }
+ out.push(cur); return out;
+}
+function parseCSV(t){
+ const lines=String(t||'').replace(/^\uFEFF/,'').split(/\r?\n/).filter(line=>line.trim()!=='');
+ if(!lines.length)return [];
+ const delimiter=(splitCSVLine(lines[0],',').length>=splitCSVLine(lines[0],';').length)?',':';';
+ let headerIndex=-1;
+ for(let i=0;i<Math.min(lines.length,40);i++){ const h=normalizeHeader(lines[i]); if(h.includes('VALOR NF')||h.includes('VALOR DO FRETE')||h.includes('CUSTO TRANSP')||h.includes('TRANSPORTADOR')){headerIndex=i;break;} }
+ if(headerIndex<0) return [];
+ const headers=splitCSVLine(lines[headerIndex],delimiter).map(x=>x.trim());
+ const idx={};headers.forEach((h,i)=>{const k=normalizeHeader(h);if(k)idx[k]=i});
+ const normalizedHeaders=headers.map(normalizeHeader);
+ const get=(arr,...names)=>{for(const n of names){const i=idx[normalizeHeader(n)];if(i!==undefined)return arr[i]??''}return ''};
+ const getFlexible=(arr,...names)=>{const direct=get(arr,...names);if(direct!=='')return direct;const targets=names.map(normalizeHeader).filter(Boolean);const i=normalizedHeaders.findIndex(h=>targets.some(t=>h===t||h.includes(t)||t.includes(h)));return i>=0?(arr[i]??''):''};
+ return lines.slice(headerIndex+1).map(line=>{const c=splitCSVLine(line,delimiter).map(x=>x.trim());return {
+  nf:get(c,'NF','CARREGAMENTO'),valor_nf:val(get(c,'VALOR NF','VALOR DA NF')),peso:val(get(c,'PESO')),volume:val(get(c,'QTD. BOBINAS','QTD BOBINAS')),
+  transportador:get(c,'TRANSPORTADOR','TRANSPORTADORA'),modal:get(c,'MODAL'),origem:get(c,'ORIGEM'),destino:get(c,'DESTINO'),uf_dest:get(c,'UF DEST','UF DESTINO'),container:get(c,'CONTÊINER','CONTAINER'),
+  custo:val(get(c,'CUSTO TRANSP.','CUSTO TRANSP','CUSTO TRANSPORTE')),extra:val(getFlexible(c,'VLR ADICIONAL','VLR. ADICIONAL','VALOR ADICIONAL','VALOR ADICIONAL R$','VLR ADICIONAL R$','ADICIONAL')),
+  frete_liquido:val(getFlexible(c,'VALOR DO FRETE','VALOR DO FRETE LIQUIDO','VALOR DO FRETE LÍQUIDO','VALOR FRETE','VALOR FRETE LIQUIDO','VALOR FRETE LÍQUIDO','VLR DO FRETE','VLR FRETE','VLR FRETE LIQUIDO','VLR FRETE LÍQUIDO','FRETE LIQUIDO','FRETE LÍQUIDO')),
+  adv:val(getFlexible(c,'ADV','VLR ADV','VALOR ADV','ADV R$','ADV R')),baf:val(getFlexible(c,'BAF','VLR BAF','VALOR BAF','BAF R$','BAF R')),
+  infraest_pedag:val(getFlexible(c,'INFRAEST. PEDAGIO','INFRAEST PEDAGIO','INFRAEST. PEDÁGIO','INFRAEST PEDÁGIO','VLR INFRAEST. PEDAGIO','VALOR INFRAEST. PEDAGIO')),
+  impostos:val(getFlexible(c,'IMPOSTOS','IMPOSTO','VLR IMPOSTOS','VALOR IMPOSTOS','IMPOSTOS R$')),frete_kg:val(get(c,'FRETE/ KG','FRETE / KG')),pct_fatur:val(get(c,'% TRANSP / FATUR','% TRANSP/FATUR')),data:get(c,'DATA CARREG','DATA CARREGAMENTO')
+ };}).filter(r=>r.nf!==''||r.valor_nf!==0||r.peso!==0||r.transportador!==''||r.extra!==0);
+}
+function parseGvizResponse(text){
+ const clean=String(text||'').replace(/^\s*\/\*O_o\*\/\s*/, '');
+ const m=clean.match(/google\.visualization\.Query\.setResponse\((.*)\)\s*;?\s*$/s);
+ if(!m)return [];
+ const obj=JSON.parse(m[1]);
+ if(obj.status&&obj.status!=='ok')throw new Error('Resposta Google inválida');
+ const table=obj.table||{}, cols=table.cols||[], data=table.rows||[];
+ if(!data.length)return [];
+ const cell=(row,i)=>{const x=(row.c||[])[i];return x&&x.v!=null?x.v:''};
+ const rowText=(row,i)=>String(cell(row,i)||'').trim();
+ // A resposta que o GViz está entregando para a aba expediçãoveld é uma tabela dinâmica:
+ // A=carregamento, B=custo transporte, C=peso, D=valor NF, E=frete/kg,
+ // F=% transporte/faturamento, G=transportadora, H=modal, I=data, J=destino, K=UF, L=qtd.
+ // Detectamos explicitamente essa estrutura. Não usamos a ordem das 70+ colunas da base,
+ // pois ela não está presente nessa resposta do Google.
+ const sample = data.slice(0,30);
+ const pivot= cols.length>=10 && sample.some(r=>{
+   const a=rowText(r,0).toLowerCase(), g=rowText(r,6), h=rowText(r,7), j=rowText(r,9);
+   return /rótulos de linha|total custo frete|média/.test(a) ||
+          (!!g && !!h && !!j && (String(cell(r,1)).trim()!=='' || String(cell(r,3)).trim()!==''));
+ });
+ if(pivot){
+   const out=[];
+   for(const row of data){
+     const transportador=rowText(row,6);
+     const modal=rowText(row,7);
+     const destino=rowText(row,9);
+     const nfLabel=rowText(row,0);
+     if(!transportador || transportador==='#N/A' || !modal || modal==='#N/A' || !destino || destino==='#N/A') continue;
+     if(!nfLabel || /total custo frete|média|rótulos de linha/i.test(nfLabel)) continue;
+     let date=rowText(row,8);
+     const dm=date.match(/^Date\((\d{4}),(\d+),(\d+)\)$/);
+     if(dm) date=`${dm[1]}-${String(Number(dm[2])+1).padStart(2,'0')}-${String(dm[3]).padStart(2,'0')}`;
+     out.push({
+       nf:nfLabel.replace(/^\s+/,''),
+       valor_nf:val(cell(row,3)),
+       peso:val(cell(row,2)),
+       volume:val(cell(row,11)),
+       transportador,
+       modal,
+       origem:'Manaus AM',
+       destino,
+       uf_dest:rowText(row,10),
+       container:nfLabel,
+       custo:val(cell(row,1)),
+       extra:0,
+       frete_liquido:val(cell(row,1)),
+       adv:0,baf:0,infraest_pedag:0,impostos:0,
+       frete_kg:val(cell(row,4)),
+       pct_fatur:val(cell(row,5)),
+       data:date
+     });
+   }
+   return out;
+ }
+ // Resposta com cabeçalhos reais.
+ const labels=cols.map(c=>String(c.label||'').trim());
+ if(labels.some(x=>/VALOR|PESO|TRANSPORT|MODAL|DESTINO|FRETE|CUSTO/i.test(x))){
+   const csv=[labels.map((x,i)=>csvQuote(x||('COL_'+i))).join(',')];
+   for(const row of data){const cells=row.c||[];csv.push(cols.map((_,i)=>{const c=cells[i];return csvQuote(!c||c.v==null?'':(c.f!=null?c.f:c.v))}).join(','));}
+   return parseCSV(csv.join('\n'));
+ }
+ return [];
+}
+function csvQuote(v){return '"'+String(v??'').replace(/"/g,'""')+'"'}
+const ONLINE_CSV_URLS = [
+ 'https://docs.google.com/spreadsheets/d/15PWGEHMXr43WyKKuN7dTBcHAGSToK8Vl/export?format=csv&gid=1475672213',
+ 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSGrC_jfP5MMcrbIDMmvZLqDxeP2n0_uZI5HdRiBO62I-BwJHdRRQQKKD-UBeyndA/pub?gid=1475672213&single=true&output=csv'
+];
+const ONLINE_CACHE_KEY = 'veldOnlineRowsV475';
+function saveOnlineCache(data){try{localStorage.setItem(ONLINE_CACHE_KEY,JSON.stringify(data));}catch(e){}}
+function loadOnlineCache(){try{const x=JSON.parse(localStorage.getItem(ONLINE_CACHE_KEY)||'null');return Array.isArray(x)?x:null}catch(e){return null}}
+async function loadOnline(){
+ if(!adminUnlocked){alert('Acesso administrativo necessário para atualizar a base.');return false;}
+ const btn=document.getElementById('btnAtualizarOnline');
+ const st=document.getElementById('autoStatus');
+ if(btn){btn.disabled=true;btn.textContent='Atualizando...';}
+ if(st)st.innerHTML='Atualização: <strong>consultando a aba ExpediçãoVeld...</strong>';
+ let lastErr='';
+ try{
+   for(const baseUrl of ONLINE_CSV_URLS){
+     try{
+       const res=await fetch(baseUrl+'&ts='+Date.now(),{cache:'no-store'});
+       if(!res.ok)throw new Error('HTTP '+res.status);
+       const text=await res.text();
+       const freshRows=parseCSV(text);
+       if(!validOnlineRows(freshRows))throw new Error('CSV sem registros compatíveis');
+       rows=freshRows;
+       saveOnlineCache(freshRows);
+       setupFilters(false);render();
+       const ss=document.getElementById('searchStatus');if(ss)ss.textContent=`${rows.length.toLocaleString('pt-BR')} registros encontrados`;
+       if(st)st.innerHTML=`Atualização: <strong>Google Sheets OK</strong> · ${rows.length.toLocaleString('pt-BR')} registros · ExpediçãoVeld`;
+       return true;
+     }catch(err){ lastErr=err; console.warn('Fonte online falhou:',baseUrl,err); }
+   }
+   throw lastErr || new Error('Nenhuma fonte online respondeu');
+ }catch(err){
+   const cached=loadOnlineCache();
+   if(cached && validOnlineRows(cached)){
+     rows=cached;setupFilters(false);render();
+     if(st)st.innerHTML=`Atualização: <strong>falhou</strong> · mantendo última base online válida (${rows.length.toLocaleString('pt-BR')} registros)`;
+   }else if(st)st.innerHTML='Atualização: <strong>falhou</strong> · mantendo a base local';
+   console.warn('Atualização online:',err);
+   return false;
+ }finally{
+   if(btn){btn.disabled=false;btn.textContent='Atualizar online';}
+ }
+}
+
+async function loadLocalCSV(){
+ try{
+   const res=await fetch('./data.csv?ts='+Date.now(),{cache:'no-store'});
+   if(!res.ok) throw new Error('data.csv não encontrado');
+   const text=await res.text();
+   const freshRows=parseCSV(text);
+   if(!validOnlineRows(freshRows)) throw new Error('data.csv inválido ou sem registros compatíveis');
+   rows=freshRows;
+   setupFilters(false);render();
+   const ss=document.getElementById('searchStatus');if(ss)ss.textContent=`${rows.length.toLocaleString('pt-BR')} registros`;
+   const st=document.getElementById('autoStatus');if(st)st.innerHTML='Base: <strong>data.csv</strong>';
+   return true;
+ }catch(err){
+   const st=document.getElementById('autoStatus');if(st)st.innerHTML='Base local: <strong>fallback incorporado</strong>';
+   setupFilters(false);render();
+   return false;
+ }
+}
+setupFilters(false);
+render();
+const initialStatus=document.getElementById('searchStatus'); if(initialStatus)initialStatus.textContent=`${filtered().length.toLocaleString('pt-BR')} registros`;
+adminUI();
+countVisitor();
+if(!loadImportedCache()) loadLocalCSV();
+</script>
+<div style="position:fixed;right:10px;bottom:8px;font:11px Arial;color:#7a8797;opacity:.8">V50 · Importação direta do Excel · contador de visitantes · SOMA financeira + CONTAGEM DISTINTA de carregamentos</div></body>
 </html>
