@@ -55,7 +55,7 @@ footer{padding:15px 24px;text-align:center;color:var(--muted);font-size:11px}
 #onlineDiagnostics{max-width:1500px;margin-left:auto!important;margin-right:auto!important}
 @media(max-width:700px){#onlineDiagnostics{margin-left:12px!important;margin-right:12px!important}}
 </style>
-<meta name="dashboard-version" content="V48"><meta name="aggregation-rule" content="financeiro-soma; carregamentos-distintos"><meta name="description" content="Custo frete | Logística Transportes"><!-- V48: data.csv local + atualização por importação protegida; contador de visitantes; valores financeiros por SOMA; carregamentos por CONTAGEM DISTINTA de CONTÊINER --><script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<meta name="dashboard-version" content="V52"><meta name="aggregation-rule" content="financeiro-soma; carregamentos-distintos"><meta name="description" content="Custo frete | Logística Transportes"><!-- V52: data.csv local + atualização por importação protegida; contador de visitantes; valores financeiros por SOMA; carregamentos por CONTAGEM DISTINTA de CONTÊINER --><script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body>
 <header>
@@ -120,8 +120,9 @@ function val(x){
    s=(parts[parts.length-1].length<=2)?s.replace(/\./g,'').replace(',','.'):s.replace(/,/g,'');
  } else if(hasDot){
    const parts=s.split('.');
+   // Um único ponto é decimal (ex.: 474999.517).
+   // Vários pontos representam agrupamento de milhares (ex.: 24.303.379).
    if(parts.length>2) s=s.replace(/\./g,'');
-   else if(parts[1] && parts[1].length===3) s=s.replace(/\./g,'');
  }
  const n=Number(s);
  return Number.isFinite(n)?(negative?-n:n):0;
@@ -205,7 +206,14 @@ function demaisCustos(r){
    impostos: val(r.impostos)
  };
 }
-function custoTotal(r){return val(r.custo)+custoExtra(r)}
+function custoTotal(r){
+ return freteLiquidoVal(r)
+   + val(r.adv)
+   + val(r.baf)
+   + val(r.infraest_pedag)
+   + val(r.impostos)
+   + custoExtra(r);
+}
 // Regra de agregação do painel V44:
 // - valores financeiros, peso e volume = SOMA das linhas filtradas;
 // - quantidade de carregamentos = CONTAGEM DISTINTA de CONTÊINER;
@@ -357,7 +365,7 @@ function loadCostHistory(rs){
  rs.forEach(r=>{
    const d=dateOnly(r); const k=d?d.slice(0,7):'Sem data';
    if(!months[k])months[k]={custo:0,extra:0};
-   months[k].custo+=val(r.custo); months[k].extra+=custoExtra(r);
+   months[k].custo+=freteLiquidoVal(r); months[k].extra+=custoExtra(r);
  });
  const a=Object.entries(months).filter(x=>x[0]!=='Sem data').sort();
  if(!a.length){svgText(svg,W/2,115,'Sem dados no período selecionado',14,700,'middle','#6b7280');return}
@@ -406,7 +414,7 @@ function render(){
  document.getElementById('kpis').innerHTML=[
   ['Valor total das NF',money(nf),'VALOR NF NO FILTRO ATUAL'],
   ['Frete líquido',money(freteLiquido),'SOMA DA COLUNA VALOR DO FRETE'],
-  ['Custo total de frete',money(totalCost),'CUSTO TRANSP. + VLR ADICIONAL'],
+  ['Custo total de frete',money(totalCost),'VALOR DO FRETE + ADV + BAF + PEDÁGIO + IMPOSTOS + VLR ADICIONAL'],
   ['Demais custos',money(rs.reduce((s,r)=>{const x=demaisCustos(r);return s+x.adv+x.baf+x.infraest_pedag+x.impostos},0)),'ADV + BAF + INFRAEST. PEDAGIO + IMPOSTOS'],
 
   ['Custo frete / KG',money2(costKg),'(CUSTO TRANSP. + VLR ADICIONAL) ÷ PESO'],
@@ -539,7 +547,7 @@ async function importFile(e){
    else throw new Error('Formato não suportado. Use XLSX, XLS ou CSV.');
    if(!validOnlineRows(imported)) throw new Error('Não encontrei registros compatíveis na aba ExpediçãoVeld.');
    rows=imported;
-   try{localStorage.setItem('veldImportedRowsV48',JSON.stringify(rows));}catch(_){}
+   try{localStorage.setItem('veldImportedRowsV52',JSON.stringify(rows));}catch(_){}
    setupFilters(false); render();
    const ss=document.getElementById('searchStatus'); if(ss) ss.textContent=rows.length.toLocaleString('pt-BR')+' registros importados';
    if(status) status.innerHTML='Base: <strong>'+file.name+'</strong> · '+rows.length.toLocaleString('pt-BR')+' registros';
@@ -590,7 +598,7 @@ function parseXLSX(buffer){
  })).filter(r=>r.nf!==''||r.valor_nf!==0||r.peso!==0||r.transportador!==''||r.destino!==''||r.custo!==0||r.extra!==0);
 }
 function loadImportedCache(){
- try{const x=JSON.parse(localStorage.getItem('veldImportedRowsV48')||'null');if(Array.isArray(x)&&validOnlineRows(x)){rows=x;return true;}}catch(e){}
+ try{const x=JSON.parse(localStorage.getItem('veldImportedRowsV52')||'null');if(Array.isArray(x)&&validOnlineRows(x)){rows=x;return true;}}catch(e){}
  return false;
 }
 
@@ -763,5 +771,5 @@ adminUI();
 countVisitor();
 if(!loadImportedCache()) loadLocalCSV();
 </script>
-<div style="position:fixed;right:10px;bottom:8px;font:11px Arial;color:#7a8797;opacity:.8">V48 · Atualização online Google Sheets protegida · contador de visitantes · SOMA financeira + CONTAGEM DISTINTA de carregamentos</div></body>
+<div style="position:fixed;right:10px;bottom:8px;font:11px Arial;color:#7a8797;opacity:.8">V52 · Atualização online Google Sheets protegida · contador de visitantes · SOMA financeira + CONTAGEM DISTINTA de carregamentos</div></body>
 </html>
